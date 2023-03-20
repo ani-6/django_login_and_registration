@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %} Notebook {% endblock title%}
+{% block content %}
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="mb-4">New Note</h2>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Title</label>
+                                {{form.title}}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <!--form method="post"-->
+                                {{form.media}}
+                                {{form.note}}
+                                <div class="card-footer bg-transparent mt-auto">
+                                    <div class="btn-list justify-content-end">
+                                        <button type="submit" class="btn btn-primary btn-pill" id="reset">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Notes</h3>
+                    </div>
+                    <div class="list-group list-group-flush overflow-auto" style="max-height: 33rem">
+                        {% for note in notes %}
+                        <div class="list-group-item">
+                            <div class="row">
+                                
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block">{{note.title}}</a>
+                                    <div class="text-muted text-truncate mt-n1">{{note.note|safe|escape}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--script>
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function () {
+        let options = {
+            selector: '#tinymce-mytextarea',
+            height: 300,
+            menubar: false,
+            statusbar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat',
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }'
+        }
+        if (localStorage.getItem("tablerTheme") === 'dark') {
+            options.skin = 'oxide-dark';
+            options.content_css = 'dark';
+        }
+        tinyMCE.init(options);
+    })
+    // @formatter:on
+</script-->
+{% endblock content %}

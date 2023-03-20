@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Profile {% endblock title %}
+{% block content %}
+
+
+<!-- Page header -->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Profile
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <a class="card card-link" href="#">
+                <div class="card-cover card-cover-blurred text-center"
+                    style="background-image: url(/static/photos/tropical-palm-leaves-floral-pattern-background.jpg)">
+                    <span class="avatar avatar-xl avatar-thumb avatar-rounded"
+                        style="background-image: url('{{ user.profile.profile_pic.url }}')"></span>
+                </div>
+                <div class="card-body text-center">
+                    <div class="card-title mb-1">{{user.first_name.title}} {{user.last_name}}</div>
+                    <div class="text-muted">{{user.profile.headline}}</div>
+                    <div class="text-muted">{{user.profile.bio|safe|escape}}</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

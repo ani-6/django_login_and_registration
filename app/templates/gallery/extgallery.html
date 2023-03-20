@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %} Gallery {% endblock title %}
+{% block content %}
+<link rel="stylesheet" href="/static/gallery/css/custom.css">
+
+<div class="page-wrapper">
+    <!-- Page header -->
+    <div class="page-header d-print-none">
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <header class="page-header-gal">
+                        <h1 class="page-title-gal text-uppercase">Image Gallery</h1>
+                        <p class="header-child-gal text-center">
+                            <i>
+                                Made with ❤
+                            </i>
+                        </p>
+                    </header>
+                </div>
+                <!-- Page title actions -->
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+
+            <main class="main-content ">
+                <div class="container-fluid photos">
+                    <div class="row align-items-stretch">
+                        {% for img in imgs %}
+                        <!-- Image -->
+                        <div class="col-6 col-md-6 col-lg-3" data-aos="fade-up">
+                            <a href="{{ img.link }}" class="d-block photo-item" data-fancybox="gallery">
+                                <img src="{{ img.thumb }}" alt="" title="" /><!-- thumb path -->
+                            </a>
+                        </div>
+                        {% endfor %}
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </main>
+            </br>
+
+            <div class="text-center">
+                <ul class="pagination">
+
+                    {% if imgs.has_previous %}
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ imgs.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}"><svg
+                                xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <polyline points="15 6 9 12 15 18" />
+                            </svg>
+                        </a></li>
+
+                    {% else %}
+                    <li class="page-item disabled"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <polyline points="15 6 9 12 15 18" />
+                        </svg>
+                        </a></li>
+                    {% endif %}
+
+                    {% if imgs.number|add:'-1' > 1 %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'-1' }}">…</a></li>
+                    {% endif %}
+
+                    {% for i in imgs.paginator.page_range %}
+                    {% if imgs.number == i %}
+                    <li class="page-item active"><a class="page-link"> {{ i }}</a></li>
+                    {% elif i > imgs.number|add:'-2' and i < imgs.number|add:'4' %} <li class="page-item"><a
+                            class="page-link"
+                            href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{i}}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if imgs.paginator.num_pages > imgs.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.number|add:'4' }}">…</a></li>
+                        {% endif %}
+                        {% if imgs.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ imgs.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <polyline points="9 6 15 12 9 18" />
+                                </svg>
+                            </a></li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <polyline points="9 6 15 12 9 18" />
+                            </svg>
+                            </a>
+                        </li>
+                        {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

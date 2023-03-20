@@ -1,0 +1,82 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" type="image/svg" href="/static/logo-small.svg">
+    <!-- CSS files -->
+    <link href="/static/ui/css/tabler.min.css?1668287865" rel="stylesheet" />
+    <link href="/static/ui/css/tabler-flags.min.css?1668287865" rel="stylesheet" />
+    <link href="/static/ui/css/tabler-payments.min.css?1668287865" rel="stylesheet" />
+    <link href="/static/ui/css/tabler-vendors.min.css?1668287865" rel="stylesheet" />
+    <link href="/static/ui/css/demo.min.css?1668287865" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="/static/UiCustom/css/main.css" rel="stylesheet" />
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/gallery/css/fancybox.min.css">
+    <link rel="stylesheet" href="/static/gallery/css/gallery.css">
+    <link rel="stylesheet" href="/static/gallery/css/aos.css">
+    <link rel="stylesheet" href="/static/gallery/css/magnific-popup.css">
+    <link rel="stylesheet" href="/static/gallery/css/owl.carousel.min.css">
+    <title>{% block title %} {% endblock %} </title>
+</head>
+
+<body class=" border-top-wide border-primary d-flex flex-column">
+    <div id="loader" class="loader"></div>
+    <!--Any flash messages pop up in any page because this is the base template-->
+    {% if user.is_authenticated %}
+        {% include 'navbar.html' %}
+        {% else %}
+        {% if messages %}
+        <div class="alert alert-dismissible" role="alert">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %}
+    {% endif %}
+    {% block content %}{% endblock %}
+
+    {% if user.is_authenticated %}
+    {% include 'footer.html' %}
+    {{ redirect_to_login_immediately }}
+    {% endif %}
+  <!-- Libs JS -->
+    <script src="/static/ui/libs/tinymce/tinymce.min.js?1668287865" defer></script>
+    <script src="/static/ui/js/demo-theme.min.js?1668287865"></script>
+
+    <script src="/static/ui/js/tabler.min.js?1668287865" defer></script>
+    <script src="/static/ui/js/demo.min.js?1668287865" defer></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/static/UiCustom/js/jquery-3.4.1.min.js"></script>  
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+   <script src="/static/UiCustom/js/main.js"></script>
+    <!-- A plugin for password show/hide  -->
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+    <!-- Gallery  -->
+    <script src="/static/gallery/js/aos.js"></script>
+	<script src="/static/gallery/js/jquery.fancybox.min.js"></script>
+	<script src="/static/gallery/js/main.js"></script>
+	<script src="/static/gallery/js/jquery.magnific-popup.min.js"></script>
+	<script src="/static/gallery/js/owl.carousel.min.js"></script>
+    
+</body>
+
+</html>

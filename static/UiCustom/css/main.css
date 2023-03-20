@@ -1,0 +1,59 @@
+nav {
+  margin-bottom: 4em;
+}
+
+.loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('sp.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+.spz-h3 {
+  font-family: 'Pushster', cursive;
+  font-size: 35px;
+  color: #af0c41;
+  text-shadow: 4px 4px 4px #cf28ed, 2px 2px 4px #985a65;
+  text-align: center;
+  isolation: isolate;
+}
+.details-col{
+    text-align: justify;
+    border-radius: 8px;
+    position: relative;
+    padding: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+}
+
+.rounded_corner{
+    border-radius: 10px;
+}
+
+@media (max-width:768px){
+    .infocol{
+      margin-right:10px;
+      overflow-x: auto;
+    }
+}
+
+@keyframes blinker {
+  from {
+    opacity: 1.0;
+  }
+
+  to {
+    opacity: 0.0;
+  }
+}
+
+.blink {
+  text-decoration: blink;
+  animation-name: blinker;
+  animation-duration: 0.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
