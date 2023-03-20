@@ -30,7 +30,7 @@ Credentials:
 
 ```bash
 git clone https://github.com/ani-6/django_login_and_registration.git
-cd django_login_and_registration.git
+cd django_login_and_registration
 ```
 
 ### Install dependencies & activate virtualenv
