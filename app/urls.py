@@ -4,6 +4,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from app.views import CustomLoginView, ResetPasswordView, ChangePasswordView
 from app.forms import LoginForm
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
      ##Account
@@ -38,5 +40,8 @@ urlpatterns = [
 
      #Downloader
      path("urldownloader/", views.Downloadfile, name="urldownloader"),
+
+     path('ckeditor/', include('ckeditor_uploader.urls')),
      
 ]
+urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

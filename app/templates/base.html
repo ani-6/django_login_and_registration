@@ -23,11 +23,9 @@
             --tblr-font-sans-serif: Inter, -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
         }
     </style>
-    <link rel="stylesheet" href="/static/gallery/css/fancybox.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
     <link rel="stylesheet" href="/static/gallery/css/gallery.css">
     <link rel="stylesheet" href="/static/gallery/css/aos.css">
-    <link rel="stylesheet" href="/static/gallery/css/magnific-popup.css">
-    <link rel="stylesheet" href="/static/gallery/css/owl.carousel.min.css">
     <title>{% block title %} {% endblock %} </title>
 </head>
 
@@ -72,11 +70,26 @@
     <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
     <!-- Gallery  -->
     <script src="/static/gallery/js/aos.js"></script>
-	<script src="/static/gallery/js/jquery.fancybox.min.js"></script>
-	<script src="/static/gallery/js/main.js"></script>
-	<script src="/static/gallery/js/jquery.magnific-popup.min.js"></script>
-	<script src="/static/gallery/js/owl.carousel.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="/static/gallery/js/main.js"></script>
+    <script>
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            compact: false,
+            contentClick: "iterateZoom",
+            Images: {
+                Panzoom: {
+                    maxScale: 3,
+                },
+            },
+            Toolbar: {
+                display: {
+                    left: ["infobar",],
+                    middle: ["zoomIn", "zoomOut", "flipX"],
+                    right: ["iterateZoom", "slideshow", "fullscreen", "close"],
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

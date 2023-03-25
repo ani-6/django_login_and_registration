@@ -99,7 +99,7 @@ class UpdateProfileForm(forms.ModelForm):
 class CreateNoteForm(forms.ModelForm):
     title = forms.CharField(max_length=50,
                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-    note = RichTextField()
+    note = RichTextUploadingField()
 
     class Meta:
         model = Notebook

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
-from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # Extending User Model Using a One-To-One Link
@@ -31,7 +31,7 @@ class Profile(models.Model):
 class Notebook(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=False)
-    note = RichTextField(blank=True, null=True)
+    note = RichTextUploadingField(blank=True, null=True)
     last_updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -29,9 +29,21 @@
                     <div class="row align-items-stretch">
                         {% for image in images %}
                         <!-- Image -->
-                        <div class="col-6 col-md-6 col-lg-3" data-aos="fade-up">
-                            <a href="/{{mediaPath}}/{{image}}" class="d-block photo-item" data-fancybox="gallery">
+                        <div class="col-6 col-md-6 col-lg-3" data-aos="zoom-in">
+                            <a href="/{{mediaPath}}/{{image}}" class="d-block photo-item" data-fancybox="gallery"
+                                data-caption="{{img.caption}}">
                                 <img src="/{{mediaPath}}/thumb/{{image}}" alt="" title="" /><!-- thumb path -->
+                                <div class="photo-text-more">
+                                    <span class="icon icon-search"><svg xmlns="http://www.w3.org/2000/svg" class="icon"
+                                            width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                            stroke="currentColor" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                            <path d="M21 21l-6 -6" />
+                                        </svg>
+                                    </span>
+                                </div>
                             </a>
                         </div>
                         <!-- --- -->
@@ -42,7 +54,7 @@
             </main>
             <br>
             <hl>
-            <p class="text-center"><a href="{%url 'users-home' %}">Back</a></p>
+                <p class="text-center"><a href="{%url 'users-home' %}">Back</a></p>
         </div>
     </div>
 </div>
