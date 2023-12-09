@@ -1,18 +1,23 @@
 .page-header-gal {
     font-family: 'Tangerine', serif;
-    font-size: 25px;
-    text-shadow: 4px 8px 8px #aaa;
-    align-items: center;
+    align-items: left;
+   
 }
 
 .page-title-gal {
-    text-align: center;
-    font-size: 36px;
-    font-weight: 600;
+    text-align: left;
+    text-shadow: 4px 8px 8px #aaa;
+    font-size: 4.25rem;
+    font-weight: 400;
+    line-height: 1.0;
     color: #8f8c62;
     isolation: isolate;
+    
 }
 
 .header-child-gal {
     color: #61AEAE;
+    font-size: 1.65rem;
 }
+
+

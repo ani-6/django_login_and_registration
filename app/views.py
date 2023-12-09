@@ -6,26 +6,18 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from .forms import *
-from .models import *
 from django.conf import settings
 from datetime import datetime
 from django.contrib.auth import logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import os, wget
-from django.template.loader import render_to_string
-from django.http import JsonResponse, HttpResponseRedirect
-from django.db.models import Q
+import os
+from django.http import   HttpResponseRedirect
 from .Gdrive.upload import UploadToDrive
-
-#fetch remote ip
-def get_ip_address(request):
-    user_ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
-    if user_ip_address:
-        ip = user_ip_address.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+from .forms import *
+from .models import *
+from .helpers import *
+from dotenv import load_dotenv
+load_dotenv() 
 
 #Home view
 @login_required
@@ -205,26 +197,27 @@ def Downloadfile(request):
 
     if request.method == 'POST':
         if form.is_valid():
-            search_id = form.cleaned_data['local_path']
-            if search_id != None:
-                file = search_id.split("/")[-1]
-                if os.path.exists(os.path.join(path, file)):
-                    print(file, "already downloaded")
+            url = form.cleaned_data['local_path']
+            if (url != None and url !=''):
+                file = url.split("/")[-1]
+                if UrlDownloaderGdrive.objects.filter(user=request.user,filename=file,local_path=url).exists():
+                    messages.info(request, file +' already downloaded.')
                 else:     
-                    filename = wget.download(search_id, out=path) 
-                    messages.success(request, 'File downloaded sucsessfullty : '+file)
-                    folderid = "1A5O9S20pzgC6toVPbcY3FMoHAiEiJ5yY"
-                    data = UploadToDrive(filename,folderid)
-                    urld = form.save(commit=False)           
-                    urld.user = request.user
-                    urld.filename = file
-                    urld.local_path = path+"/"+file  
-                    urld.fileid = data['FileID']  
-                    urld.folderid = data['FolderID']         
-                    urld.shared = data['Shared']     
-                    urld.save()
-                    os.remove(filename)   
-                    return HttpResponseRedirect('/urldownloader')
+                    fullfilepath = path+file
+                    if downlaodfile(url,fullfilepath):
+                        folderid = str(os.getenv('DriveFolderId'))
+                        data = UploadToDrive(fullfilepath,folderid)
+                        urld = form.save(commit=False)           
+                        urld.user = request.user
+                        urld.filename = file
+                        urld.local_path = url  
+                        urld.fileid = data['FileID']  
+                        urld.folderid = data['FolderID']         
+                        urld.shared = data['Shared']     
+                        urld.save()
+                        messages.success(request, 'File downloaded sucsessfullty : '+file)
+                        os.remove(fullfilepath)   
+                        return HttpResponseRedirect('/urldownloader')
     context = {'list':list,'form':form,'allfiles':allfiles}
     return render(request, "downloader/download.html",context)
 

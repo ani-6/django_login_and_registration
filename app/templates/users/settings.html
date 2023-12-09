@@ -1,17 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Settings {% endblock title %}
+{% block title %} Settings {% endblock title %}
 {% block content %}
 
 {% if form.errors %}
 <div class="alert alert-danger alert-dismissible" role="alert">
-    <div id="form_errors">
+    <div class="d-flex">
+        <div>
+        <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
+        </div>
+        <div>
         {% for key, value in form.errors.items %}
         <strong>{{ value }}</strong>
         {% endfor %}
+         </div>
     </div>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
 </div>
 {% endif %}
 <div class="page-wrapper">
@@ -32,7 +36,7 @@
         <div class="container-xl">
             <div class="card">
                 <div class="row g-0">
-                    <div class="col-3 d-none d-md-block border-end">
+                    <div class="col-12 col-md-3 border-end">
                         <div class="card-body">
                             <h4 class="subheader">Settings</h4>
                             <div class="list-group list-group-transparent">
@@ -48,7 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col d-flex flex-column">
+                    <div class="col-12 col-md-9 d-flex flex-column">
                         <div class="card-body">
                             <h2 class="mb-4">My Account</h2>
                             <form method="post" enctype="multipart/form-data">
@@ -120,19 +124,19 @@
 
                                     </div>
                                 </div>
-
+                                </br>
+                                <div class="card-footer bg-transparent mt-auto">
+                                    <div class="btn-list justify-content-end">
+                                        <button type="reset" class="btn btn-secondary btn-pill">Reset</button>
+                                        <button type="submit" class="btn btn-primary btn-pill">Save Changes</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                        <div class="card-footer bg-transparent mt-auto">
-                            <div class="btn-list justify-content-end">
-                                <button type="reset" class="btn btn-secondary btn-pill">Reset</button>
-                                <button type="submit" class="btn btn-primary btn-pill">Save Changes</button>
-                            </div>
-                        </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-{% endblock content %}
+    {% endblock content %}
