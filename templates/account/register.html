@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %} Register {% endblock title%}
+{% block content %}
+
+<div class="page page-center">
+    <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark"><img src="/static/logo.svg" height="32" alt=""></a>
+        </div>
+        <form class="card card-md" method="POST" autocomplete="off" novalidate>
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                            <path d="M12 8v4" />
+                            <path d="M12 16h.01" />
+                        </svg>
+                    </div>
+                    <div>
+                        {% for key, value in form.errors.items %}
+                        <strong>{{ value }}</strong>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create new account</h2>
+                <div class="mb-3">
+                    <label class="form-label required">Username</label>
+                    {{ form.username }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label required">Email address</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label required">Password</label>
+                    <div class="input-group input-group-flat">
+                        {{ form.password1 }}
+                        {{ form.errors.password }}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label required">Password</label>
+                    <div class="input-group input-group-flat">
+                        {{ form.password2 }}
+                        {{ form.errors.password }}
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                </div>
+            </div>
+        </form>
+        <div class="text-center text-secondary mt-3">
+            Already have account? <a href="{% url 'account:login' %}" tabindex="-1">Sign in</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
