@@ -44,5 +44,4 @@ class Command(BaseCommand):
                 user = User.objects.create_user(username=username,first_name=username, email='', password=password)
                 my_group = Group.objects.get(name='Users') 
                 user.groups.add(my_group)
-                Home_LatestUpdates.objects.create(user=user,update='Welcome to the Hub!')
                 self.stdout.write('User "%s (%s)" created successfully with password "%s"!' % (user.username, user.id, password))

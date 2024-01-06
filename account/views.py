@@ -53,7 +53,7 @@ class CustomLoginView(LoginView):
         print(remember_me)
         if not remember_me:
             # set session expiry to 0 seconds. So it will automatically close the session after the browser is closed.
-            self.request.session.set_expiry(0)
+            self.request.session.set_expiry(300)
 
             # Set session as modified to force data updates/cookie to be saved.
             self.request.session.modified = True

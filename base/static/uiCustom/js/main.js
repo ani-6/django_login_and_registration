@@ -1,3 +1,4 @@
+//Clock js
 function currentTime() {
   let date = new Date(); 
   let hh = date.getHours();
@@ -24,3 +25,5 @@ function currentTime() {
 }
 
 currentTime();
+
+

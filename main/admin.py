@@ -9,7 +9,7 @@ class Home_ImportantLinks_Admin(admin.ModelAdmin):
         }),
         ('Link Details', {
         'classes': ('wide','collapse', 'expanded'),
-        'fields': ['heading','description','link'],
+        'fields': ['heading','description','link','is_active'],
         }),
         )
     list_display = ('heading',)

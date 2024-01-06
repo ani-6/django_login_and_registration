@@ -6,7 +6,7 @@ Credentials:
 - Username : admin
 - password : serveradmin987
 
-- Username : test_Fg6L6O
+- Username : test_user
 - Password : test@123
 
 

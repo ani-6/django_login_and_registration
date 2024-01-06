@@ -16,7 +16,7 @@ class Home_ImportantLinks(models.Model):
         return self.heading
     
     class Meta:
-        verbose_name = "user"
+        verbose_name = "link"
         verbose_name_plural = "Important Links"
 
 class Home_LatestUpdates(models.Model):
@@ -28,7 +28,7 @@ class Home_LatestUpdates(models.Model):
         return self.update
 
     class Meta:
-        verbose_name = "user"
+        verbose_name = "update"
         verbose_name_plural = "Latest Updates"
 
 class Image_Gallery(models.Model):
@@ -42,8 +42,8 @@ class Image_Gallery(models.Model):
     def __str__(self):
         return self.image
     
-    def img_preview(self): #new
-        return mark_safe(f'<img src = "{self.thumb}" width="70px" />')
+    def img_preview(self):
+        return mark_safe(f'<img loading=lazy src = "{self.thumb}" width="70px" />')
     
     class Meta:
         verbose_name = "image"
@@ -64,4 +64,4 @@ class UrlToGdrive(models.Model):
 
     class Meta:
         verbose_name = "file"
-        verbose_name_plural = "Gdrive Files"
+        verbose_name_plural = "Cloud Files"

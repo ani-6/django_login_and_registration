@@ -7,7 +7,7 @@ from datetime import datetime
 from .helpers import *
 from .models import *
 from .forms import *
-from account.models import Profile
+from .services import *
 from base.Gdrive.gdriveOps import *
 
 # Create your views here.
@@ -17,8 +17,8 @@ def Home_View(request):
         myDate = datetime.now()
         formatedDate = myDate.strftime("%a, %Y-%m-%d")
         user_ip = get_ip_address(request)
-        pagedata = Home_ImportantLinks.objects.filter(user=request.user,is_active=True)
-        updates = Home_LatestUpdates.objects.filter(user=request.user).order_by('-created_at')[:4]
+        pagedata = GetImportantLinks(request.user,True)
+        updates = GetLatestUpdates(request.user)
         context = {'user_ip':user_ip, 'date':formatedDate,'data':pagedata,'updates': updates}
         return render(request,"main/index.html", context)  
     except:
@@ -27,7 +27,7 @@ def Home_View(request):
 @login_required
 def Image_Gallery_View(request):
     #try:
-        object_list = Image_Gallery.objects.filter(user__exact=request.user)
+        object_list = GetGalleryObjects(request.user)
         page = request.GET.get('page', 1)
 
         paginator = Paginator(object_list, 8)
@@ -55,7 +55,7 @@ def Local_Gallery(request):
 #File downloader  
 @login_required  
 def DownlaodUrlToGdrive(request):
-    allfiles = UrlToGdrive.objects.filter(user=request.user)
+    allfiles = GetAllDriveObjects(request.user)
     form = UrlToGdriveForm(request.POST)
     path = "media/Main/downloads/"
 
@@ -64,7 +64,7 @@ def DownlaodUrlToGdrive(request):
             url = form.cleaned_data['local_path']
             if (url != None and url != ''):
                 file = url.split("/")[-1]
-                if UrlToGdrive.objects.filter(user=request.user,filename=file,original_path=url).exists():
+                if IfDriveObjectExists(request.user,file,url):
                     messages.info(request, file +' already downloaded.')
                 else:     
                     fullfilepath = path+file     
