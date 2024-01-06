@@ -34,6 +34,7 @@ pip install -r requirements.txt
 ### Configure the settings (connection to the database, connection to an SMTP server, and other options)
 
 - Add environment variables in .env file
+- Put your credentials/token file in base/Gdrive to make downloader work
 
 ### Create required groups, superuser and test users (req only if running new DB)
 create superuser and test users with prefix test
