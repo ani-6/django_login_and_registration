@@ -50,7 +50,6 @@ class CustomLoginView(LoginView):
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get('remember_me')
-        print(remember_me)
         if not remember_me:
             # set session expiry to 0 seconds. So it will automatically close the session after the browser is closed.
             self.request.session.set_expiry(300)
