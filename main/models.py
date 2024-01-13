@@ -29,7 +29,7 @@ class Home_LatestUpdates(models.Model):
 
     class Meta:
         verbose_name = "update"
-        verbose_name_plural = "Latest Updates"
+        verbose_name_plural = "Updates for user"
 
 class Image_Gallery(models.Model):
     user = models.ManyToManyField(User)
@@ -65,3 +65,18 @@ class UrlToGdrive(models.Model):
     class Meta:
         verbose_name = "file"
         verbose_name_plural = "Cloud Files"
+
+class globalAnnouncement(models.Model):
+    title = models.CharField(max_length=255, null=False)
+    body = models.TextField(blank=False)
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated_at = models.DateTimeField(auto_now=True)
+    
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Announcement"
+        verbose_name_plural = "Global Notifications"

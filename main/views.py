@@ -22,7 +22,7 @@ def Home_View(request):
         context = {'user_ip':user_ip, 'date':formatedDate,'data':pagedata,'updates': updates}
         return render(request,"main/index.html", context)  
     except:
-            return render (request, "error-400.html")
+        return render (request, "error-404.html")
 
 @login_required
 def Image_Gallery_View(request):

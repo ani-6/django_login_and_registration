@@ -47,7 +47,11 @@ class UrlToGdrive_Admin(admin.ModelAdmin):
     list_display = ('user','filename','created_at')
     list_filter = ['user']
 
+class globalAnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'body', 'created_at')
+
 admin.site.register(Home_ImportantLinks,Home_ImportantLinks_Admin)
 admin.site.register(Home_LatestUpdates,Home_LatestUpdates_Admin)
 admin.site.register(Image_Gallery,Image_Gallery_Admin)
 admin.site.register(UrlToGdrive,UrlToGdrive_Admin)
+admin.site.register(globalAnnouncement,globalAnnouncementAdmin)

@@ -74,6 +74,8 @@ TEMPLATES = [
                 #For social Login
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                # for notifications
+                'main.context_processors.announcement_context_processor',
             ],
         },
     },
