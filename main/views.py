@@ -86,3 +86,9 @@ def DownlaodUrlToGdrive(request):
                         return HttpResponseRedirect('/urldownloader/')
     context = {'list':list,'form':form,'allfiles':allfiles}
     return render(request, "main/urltodrive.html",context)
+
+@login_required
+def notifications(request):
+    objects = getAnnouncements()
+    context = {'objects':objects}
+    return render(request, "main/notifications.html",context)

@@ -19,3 +19,7 @@ def GetAllDriveObjects(user):
 def IfDriveObjectExists(user,file,url):
     exists = UrlToGdrive.objects.filter(user=user,filename=file,original_path=url).exists()
     return exists
+
+def getAnnouncements():
+    objects = globalAnnouncement.objects.filter(is_active=True).order_by('-created_at')[:6]
+    return objects

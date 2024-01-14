@@ -64,7 +64,7 @@
                                         <div class="col-auto"><span
                                                 class="status-dot status-dot-animated bg-red d-block"></span></div>
                                         <div class="col text-truncate">
-                                            <a href="#" class="text-body d-block">{{ announcement.title|safe }}</a>
+                                            <a href="{% url 'main:notifications' %}" class="text-body d-block">{{ announcement.title|safe }}</a>
                                             <div class="d-block text-secondary text-truncate mt-n1">
                                                 {{ announcement.body|safe }}
                                             </div>

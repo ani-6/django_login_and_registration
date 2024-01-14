@@ -22,7 +22,7 @@ Credentials:
 - Change email
 - Change profile
 - Gallery 
-- Download imgs form url and upload to google drive (put token in base>Gdrive folder)
+- Download files form url and upload to google drive (put token in base>Gdrive folder)
 
 
 ### Install dependencies & activate virtualenv
