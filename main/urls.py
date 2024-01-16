@@ -8,14 +8,14 @@ app_name = 'main'
 
 urlpatterns = [
      #Main App
-     path('', Home_View, name='home'),
+     path('', home_view, name='home'),
      #Notifications
-     path('notifications/', notifications, name='notifications'),
+     path('notifications/', notifications_view, name='notifications'),
      #Image Gallery
-     path('gallery/', Image_Gallery_View, name='gallery'),
-     path('localgallery/', Local_Gallery, name='localgallery'),
+     path('gallery/', image_gallery_view, name='gallery'),
+     path('localgallery/', local_gallery_view, name='localgallery'),
      #Downloader
-     path("urldownloader/", DownlaodUrlToGdrive, name="urldownloader"),
+     path("urldownloader/", downlaodUrlToGdrive_view, name="urldownloader"),
 
 ] 
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

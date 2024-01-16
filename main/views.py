@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -12,38 +12,37 @@ from base.Gdrive.gdriveOps import *
 
 # Create your views here.
 @login_required
-def Home_View(request):
+def home_view(request):
     try:
         myDate = datetime.now()
         formatedDate = myDate.strftime("%a, %Y-%m-%d")
         user_ip = get_ip_address(request)
-        pagedata = GetImportantLinks(request.user,True)
-        updates = GetLatestUpdates(request.user)
+        pagedata = get_ImportantLinks(request.user,True)
+        updates = get_LatestUpdates(request.user)
         context = {'user_ip':user_ip, 'date':formatedDate,'data':pagedata,'updates': updates}
         return render(request,"main/index.html", context)  
     except:
         return render (request, "error-404.html")
 
 @login_required
-def Image_Gallery_View(request):
-    #try:
-        object_list = GetGalleryObjects(request.user)
-        page = request.GET.get('page', 1)
+def image_gallery_view(request):
+    object_list = get_GalleryObjects(request.user)
+    page = request.GET.get('page', 1)
 
-        paginator = Paginator(object_list, 8)
-        try:
-            page_obj = paginator.page(page)
-        except PageNotAnInteger:
-            page_obj = paginator.page(1)
-        except EmptyPage:
-            page_obj = paginator.page(paginator.num_pages)
+    paginator = Paginator(object_list, 8)
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
 
-        context = {"page_obj":page_obj,}
-        return render(request, "main/image_gallery.html",context)
+    context = {"page_obj":page_obj,}
+    return render(request, "main/image_gallery.html",context)
 
 #Main Gallery
 @login_required
-def Local_Gallery(request):
+def local_gallery_view(request):
     statpath = "media/Main/gallery/"
     img_list=os.listdir(statpath)
     for img in img_list[:]: 
@@ -54,8 +53,8 @@ def Local_Gallery(request):
 
 #File downloader  
 @login_required  
-def DownlaodUrlToGdrive(request):
-    allfiles = GetAllDriveObjects(request.user)
+def downlaodUrlToGdrive_view(request):
+    allfiles = get_AllDriveObjects(request.user)
     form = UrlToGdriveForm(request.POST)
     path = "media/Main/downloads/"
 
@@ -68,10 +67,10 @@ def DownlaodUrlToGdrive(request):
                     messages.info(request, file +' already downloaded.')
                 else:     
                     fullfilepath = path+file     
-                    if downlaodfile(url,fullfilepath):
+                    if downlaod_file(url,fullfilepath):
                         folderid = request.user.profile.remote_fol_id
                         ext = file.split(".")[-1]
-                        mimetype = GetmimeType(ext)
+                        mimetype = get_mimeType(ext)
                         data = UploadToDrive(fullfilepath,folderid,mimetype)
                         urld = form.save(commit=False)           
                         urld.user = request.user
@@ -88,7 +87,7 @@ def DownlaodUrlToGdrive(request):
     return render(request, "main/urltodrive.html",context)
 
 @login_required
-def notifications(request):
-    objects = getAnnouncements()
+def notifications_view(request):
+    objects = get_Announcements()
     context = {'objects':objects}
     return render(request, "main/notifications.html",context)

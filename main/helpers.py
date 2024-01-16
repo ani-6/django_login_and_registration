@@ -9,12 +9,12 @@ def get_ip_address(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-def GetmimeType(find):
+def get_mimeType(find):
     f = open('base/static/data/mimetype.json')
     data = json.load(f)
     return data[find]
 
-def downlaodfile(remote_url, fullfilepath):
+def downlaod_file(remote_url, fullfilepath):
     try:
         data = requests.get(remote_url)
         # Save file data to local copy
