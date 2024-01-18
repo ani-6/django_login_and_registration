@@ -56,6 +56,8 @@ class CustomLoginView(LoginView):
 
             # Set session as modified to force data updates/cookie to be saved.
             self.request.session.modified = True
+        else:
+            self.request.session['remember_me'] = True
 
         # else browser session will be as long as the session cookie time "SESSION_COOKIE_AGE" defined in settings.py
         return super(CustomLoginView, self).form_valid(form)

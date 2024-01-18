@@ -74,6 +74,38 @@
             {% endif %}
         </div>
         <!-- Import Libs JS -->
+        <script>
+            let lastActiveTime = new Date();
+        
+            function checkTimeDifference() {
+              const rememberMe = sessionStorage.getItem('remember_me'); // Check if "Remember Me" flag is set
+              if (rememberMe === 'true') {
+                // If "Remember Me" is true, ignore the inactivity check
+                return;
+              }
+        
+              const currentTime = new Date();
+              const timeDifference = (currentTime - lastActiveTime) / 1000; // in seconds
+        
+              if (timeDifference > 90) {
+                // Redirect the page after 30 seconds of inactivity
+                location.href = "{% url 'account:logout'%}";
+              }
+            }
+        
+            // Run the check every 5 seconds
+            setInterval(function() {
+              checkTimeDifference();
+            }, 5000);
+        
+            // Update last active time when user interacts with the page
+            function updateActivity() {
+              lastActiveTime = new Date();
+            }
+        
+            document.addEventListener('mousemove', updateActivity);
+            document.addEventListener('touchmove', updateActivity); // Added touchmove event for mobile scrolling
+          </script>
         
         <script src="/static/uiCustom/js/main.js"></script>
         <!-- Tabler Core -->
