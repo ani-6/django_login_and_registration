@@ -78,7 +78,7 @@
             let lastActiveTime = new Date();
         
             function checkTimeDifference() {
-              const rememberMe = sessionStorage.getItem('remember_me'); // Check if "Remember Me" flag is set
+              const rememberMe = '{{ request.session.remember_me }}'; // Check if "Remember Me" flag is set
               if (rememberMe === 'true') {
                 // If "Remember Me" is true, ignore the inactivity check
                 return;
