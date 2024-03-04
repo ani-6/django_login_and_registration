@@ -17,7 +17,7 @@ class Home_ImportantLinks(models.Model):
     
     class Meta:
         verbose_name = "link"
-        verbose_name_plural = "Important Links"
+        verbose_name_plural = "Important links"
 
 class Home_LatestUpdates(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,7 +29,7 @@ class Home_LatestUpdates(models.Model):
 
     class Meta:
         verbose_name = "update"
-        verbose_name_plural = "Updates for user"
+        verbose_name_plural = "User specific updates"
 
 class Image_Gallery(models.Model):
     user = models.ManyToManyField(User)
@@ -47,7 +47,7 @@ class Image_Gallery(models.Model):
     
     class Meta:
         verbose_name = "image"
-        verbose_name_plural = "Image Gallery"
+        verbose_name_plural = "Image gallery"
     
 class UrlToGdrive(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -64,7 +64,7 @@ class UrlToGdrive(models.Model):
 
     class Meta:
         verbose_name = "file"
-        verbose_name_plural = "Cloud Files"
+        verbose_name_plural = "Cloud files"
 
 class globalAnnouncement(models.Model):
     title = models.CharField(max_length=255, null=False)
@@ -79,4 +79,4 @@ class globalAnnouncement(models.Model):
 
     class Meta:
         verbose_name = "Announcement"
-        verbose_name_plural = "Global Notifications"
+        verbose_name_plural = "Global notifications"

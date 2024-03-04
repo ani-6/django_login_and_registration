@@ -79,7 +79,7 @@
         
             function checkTimeDifference() {
               const rememberMe = '{{ request.session.remember_me }}'; // Check if "Remember Me" flag is set
-              if (rememberMe === 'true') {
+              if (rememberMe === 'True') {
                 // If "Remember Me" is true, ignore the inactivity check
                 return;
               }

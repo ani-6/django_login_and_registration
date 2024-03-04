@@ -2,7 +2,10 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
-class Home_ImportantLinks_Admin(admin.ModelAdmin):
+
+# Important links admin 
+@admin.register(Home_ImportantLinks)
+class home_ImportantLinks_admin(admin.ModelAdmin):
     fieldsets = (
         ('Select User', {
         'fields': ['user']
@@ -15,11 +18,15 @@ class Home_ImportantLinks_Admin(admin.ModelAdmin):
     list_display = ('heading',)
     list_filter = ['user']
 
-class Home_LatestUpdates_Admin(admin.ModelAdmin):
+# Latest updates admin
+@admin.register(Home_LatestUpdates)
+class home_LatestUpdates_admin(admin.ModelAdmin):
     list_display = ('user','update')
     list_filter = ['user']
 
-class Image_Gallery_Admin(admin.ModelAdmin):
+# Image gallery admin
+@admin.register(Image_Gallery)
+class imageGallery_admin(admin.ModelAdmin):
     fieldsets = (
         ('Select User', {
         'fields': ['user']
@@ -33,7 +40,9 @@ class Image_Gallery_Admin(admin.ModelAdmin):
     list_display = ('img_preview','caption','created_at')
     list_filter = ['user']
 
-class UrlToGdrive_Admin(admin.ModelAdmin):
+# UrlToGdrive admin
+@admin.register(UrlToGdrive)
+class urlToGdrive_admin(admin.ModelAdmin):
     fieldsets = (
         ('Select User', {
         'fields': ['user']
@@ -47,11 +56,7 @@ class UrlToGdrive_Admin(admin.ModelAdmin):
     list_display = ('user','filename','created_at')
     list_filter = ['user']
 
-class globalAnnouncementAdmin(admin.ModelAdmin):
+# Global announcement admin
+@admin.register(globalAnnouncement)
+class globalAnnouncement_admin(admin.ModelAdmin):
     list_display = ('title', 'body', 'created_at')
-
-admin.site.register(Home_ImportantLinks,Home_ImportantLinks_Admin)
-admin.site.register(Home_LatestUpdates,Home_LatestUpdates_Admin)
-admin.site.register(Image_Gallery,Image_Gallery_Admin)
-admin.site.register(UrlToGdrive,UrlToGdrive_Admin)
-admin.site.register(globalAnnouncement,globalAnnouncementAdmin)

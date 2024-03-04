@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import *
 # Register your models here.
 
-
-class ProfileAdmin(admin.ModelAdmin):
+@admin.register(Profile)
+class profile_admin(admin.ModelAdmin):
     fieldsets = (
         ('Select User', {
         'fields': ['user']
@@ -22,5 +22,3 @@ class ProfileAdmin(admin.ModelAdmin):
         }),
         )
     list_display = ["user","gender"]
-
-admin.site.register(Profile,ProfileAdmin)

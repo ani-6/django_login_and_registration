@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 
-class UrlToGdriveForm(forms.ModelForm):
+class urlToGdrive_form(forms.ModelForm):
     filename = forms.CharField(max_length=50,
                                widget=forms.TextInput(attrs={'class': 'form-control'}),required=False,)
     fileid = forms.CharField(max_length=50,

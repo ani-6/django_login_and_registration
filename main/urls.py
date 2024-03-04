@@ -12,8 +12,8 @@ urlpatterns = [
      #Notifications
      path('notifications/', notifications_view, name='notifications'),
      #Image Gallery
-     path('gallery/', image_gallery_view, name='gallery'),
-     path('localgallery/', local_gallery_view, name='localgallery'),
+     path('gallery/', imageGallery_view, name='gallery'),
+     path('localgallery/', localGallery_view, name='localgallery'),
      #Downloader
      path("urldownloader/", downlaodUrlToGdrive_view, name="urldownloader"),
 

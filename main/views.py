@@ -25,7 +25,7 @@ def home_view(request):
         return render (request, "error-404.html")
 
 @login_required
-def image_gallery_view(request):
+def imageGallery_view(request):
     object_list = get_GalleryObjects(request.user)
     page = request.GET.get('page', 1)
 
@@ -42,7 +42,7 @@ def image_gallery_view(request):
 
 #Main Gallery
 @login_required
-def local_gallery_view(request):
+def localGallery_view(request):
     statpath = "media/Main/gallery/"
     img_list=os.listdir(statpath)
     for img in img_list[:]: 
@@ -55,7 +55,7 @@ def local_gallery_view(request):
 @login_required  
 def downlaodUrlToGdrive_view(request):
     allfiles = get_AllDriveObjects(request.user)
-    form = UrlToGdriveForm(request.POST)
+    form = urlToGdrive_form(request.POST)
     path = "media/Main/downloads/"
 
     if request.method == 'POST':

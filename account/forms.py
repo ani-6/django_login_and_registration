@@ -9,7 +9,7 @@ GENDER =(
         ('Other','Other')
     )
 
-class RegisterForm(UserCreationForm):
+class register_form(UserCreationForm):
     # fields we want to include and customize in our form
     first_name = forms.CharField(max_length=100,
                                  required=False,
@@ -54,17 +54,17 @@ class RegisterForm(UserCreationForm):
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
 
-class LoginForm(AuthenticationForm):
+class login_form(AuthenticationForm):
     username = forms.CharField(max_length=100,
                                required=True,
                                error_messages={'required': 'Please enter Username!'},
-                               widget=forms.TextInput(attrs={'placeholder': 'Username',
+                               widget=forms.TextInput(attrs={'placeholder': 'Your Username',
                                                              'class': 'form-control',
                                                              }))
     password = forms.CharField(max_length=50,
                                required=True,
                                error_messages={'required': 'Please enter Password!'},
-                               widget=forms.PasswordInput(attrs={'placeholder': 'Password',
+                               widget=forms.PasswordInput(attrs={'placeholder': 'Your Password',
                                                                  'class': 'form-control',
                                                                  'data-toggle': 'password',
                                                                  'id': 'password',
@@ -76,7 +76,7 @@ class LoginForm(AuthenticationForm):
         model = User
         fields = ['username', 'password', 'remember_me']
 
-class UpdateUserForm(forms.ModelForm):
+class updateUser_form(forms.ModelForm):
     username = forms.CharField(max_length=100,
                                required=True,
                                disabled=True,
@@ -95,7 +95,7 @@ class UpdateUserForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email']
 
 
-class UpdateProfileForm(forms.ModelForm):
+class updateProfile_form(forms.ModelForm):
     profile_pic = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control','type':'file'}))
     headline = forms.CharField(max_length=100,
                                widget=forms.TextInput(attrs={'class': 'form-control'}),required=False)
