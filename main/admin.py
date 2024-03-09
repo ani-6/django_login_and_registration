@@ -15,7 +15,7 @@ class home_ImportantLinks_admin(admin.ModelAdmin):
         'fields': ['heading','description','link','is_active'],
         }),
         )
-    list_display = ('heading',)
+    list_display = ('heading','last_updated_at')
     list_filter = ['user']
 
 # Latest updates admin
@@ -36,7 +36,8 @@ class imageGallery_admin(admin.ModelAdmin):
         'fields': ['image','thumb','caption'],
         }),
         )
-    readonly_fields = ['img_preview']
+    search_fields = ('image', 'caption')
+    readonly_fields = ('img_preview',)
     list_display = ('img_preview','caption','created_at')
     list_filter = ['user']
 
@@ -52,11 +53,12 @@ class urlToGdrive_admin(admin.ModelAdmin):
         'fields': ['filename','original_path','fileid','folderid','shared'],
         }),
         )
-    
+    search_fields = ('filename', 'original_path')
     list_display = ('user','filename','created_at')
     list_filter = ['user']
 
 # Global announcement admin
 @admin.register(globalAnnouncement)
 class globalAnnouncement_admin(admin.ModelAdmin):
-    list_display = ('title', 'body', 'created_at')
+    list_display = ('title', 'body', 'created_at','last_updated_at')
+    search_fields = ('title','body')
