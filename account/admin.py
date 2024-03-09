@@ -26,12 +26,25 @@ class profile_admin(admin.ModelAdmin):
 @admin.register(Messages)
 class messages_admin(admin.ModelAdmin):
     fieldsets = (
-        ('Select User', {
+        ('Select Users', {
         'fields': ['sender','receiver']
         }),
-        ('Pictures', {
+        ('Chat', {
         'classes': ('wide',),
         'fields': ('message',),
         }),
     )
-    list_display = ["sender","receiver","message",]
+    list_display = ["sender","receiver","message","created_at"]
+
+@admin.register(Feedback)
+class feedback_admin(admin.ModelAdmin):
+    fieldsets = (
+        ('User Details', {
+        'fields': ['user','email']
+        }),
+        ('Feedback', {
+        'classes': ('wide',),
+        'fields': ('comment',),
+        }),
+    )
+    list_display = ["user","comment","comment","created_at"]

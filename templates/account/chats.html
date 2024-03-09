@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Feedback {% endblock title %}
+{% block title %} Chats {% endblock title %}
 {% block content %}
 <!-- Page header -->
 <div class="page-header d-print-none">
@@ -19,8 +19,7 @@
     <div class="container-xl">
         <div class="row row-cards">
             {%for user in pageobj %}
-            <div class="col-md-6 col-lg-3">
-                
+            <div class="col-md-6 col-lg-3"> 
                 <div class="card">
                     <div class="card-body p-4 text-center">
                         <span class="avatar avatar-xl mb-3 rounded" style="background-image: url('{{ user.profile.profile_pic.url }}')"></span>

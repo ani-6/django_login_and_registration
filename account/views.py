@@ -114,6 +114,24 @@ def profile_view(request):
     return render(request, "account/profile.html")
 
 @login_required
+def feedback_view(request):
+    form = feedback_form(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            form = form.save(commit=False)
+            form.user = request.user
+            form.email = request.user.email
+            form.comment = comment
+            form.save()
+            messages.success(request, 'Feedback sent!')
+            return HttpResponseRedirect('/account/feedback/')
+    else:
+        form = form
+    context = {'form':form,}
+    return render(request, 'account/feedback.html',context)
+
+@login_required
 def chats_view(request):
     users = User.objects.filter(is_active=True).distinct().exclude(username=request.user.username)
     context = {'pageobj':users,}
@@ -130,11 +148,11 @@ def chat_view(request,id):
     if request.method == 'POST':
         if form.is_valid():
             message = form.cleaned_data['message']
-            fbform = form.save(commit=False)           
-            fbform.sender = request.user
-            fbform.receiver = User.objects.get(id=id)
-            fbform.message = message
-            fbform.save()
+            form = form.save(commit=False)           
+            form.sender = request.user
+            form.receiver = User.objects.get(id=id)
+            form.message = message
+            form.save()
             messages.success(request, 'Message sent!')
             to_url = '/account/chat/'+str(id)
             return HttpResponseRedirect(to_url)

@@ -31,7 +31,7 @@ class Profile(models.Model):
 class Messages(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Sender")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Receiver")
-    message = models.TextField(null=True, blank=True,verbose_name='Comment')
+    message = models.TextField(null=True, blank=True,verbose_name='Message')
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated_at = models.DateTimeField(auto_now=True)
     
@@ -41,3 +41,17 @@ class Messages(models.Model):
     class Meta:
         verbose_name = "Message"
         verbose_name_plural = "Messages List"
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="User")
+    email = email = models.EmailField(max_length=254)
+    comment = models.TextField(null=True, blank=True,verbose_name='Comment')
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.user.username
+    
+    class Meta:
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedback List"

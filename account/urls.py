@@ -22,6 +22,7 @@ urlpatterns = [
      path('da/', views.deleteAvtar_view, name='da'),
      path('chats/', views.chats_view, name='chats'),
      path('chat/<int:id>/', views.chat_view, name='chat'),
+     path('feedback/', views.feedback_view, name='feedback'),
 
      re_path(r'^oauth/', include('social_django.urls', namespace='social')),
 
