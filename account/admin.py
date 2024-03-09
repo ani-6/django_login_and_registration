@@ -32,7 +32,7 @@ class profile_admin(admin.ModelAdmin):
 @admin.register(Messages)
 class messages_admin(admin.ModelAdmin):
     fieldsets = (
-        ('Select Users', {
+        ('Users', {
         'fields': ['sender','receiver']
         }),
         ('Chat', {
@@ -42,7 +42,7 @@ class messages_admin(admin.ModelAdmin):
     )
     search_fields = ('user__username', 'message')
     list_display = ['sender','receiver','message','created_at']
-    readonly_fields = ['created_at','last_updated_at']
+    readonly_fields = ['sender','receiver','message','created_at','last_updated_at']
 
 @admin.register(Feedback)
 class feedback_admin(admin.ModelAdmin):
@@ -57,4 +57,4 @@ class feedback_admin(admin.ModelAdmin):
     )
     search_fields = ('user__username','change_message')
     list_display = ['user','comment','created_at']
-    readonly_fields = ['created_at','last_updated_at']
+    readonly_fields = ['user','email','comment','created_at','last_updated_at']
