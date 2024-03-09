@@ -23,6 +23,8 @@ Credentials:
 - Change profile
 - Gallery 
 - Download files form url and upload to google drive (put token in base>Gdrive folder)
+- Basic chat application
+- Feedback form
 
 
 ### Install dependencies & activate virtualenv
