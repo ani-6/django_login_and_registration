@@ -27,3 +27,17 @@ class Profile(models.Model):
 
         img = Image.open(self.profile_pic.path)        
         img.save(self.profile_pic.path)
+
+class Messages(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Sender")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Receiver")
+    message = models.TextField(null=True, blank=True,verbose_name='Comment')
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.sender.username
+    
+    class Meta:
+        verbose_name = "Message"
+        verbose_name_plural = "Messages List"

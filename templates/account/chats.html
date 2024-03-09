@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} Feedback {% endblock title %}
+{% block content %}
+<!-- Page header -->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Users
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page body -->
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            {%for user in pageobj %}
+            <div class="col-md-6 col-lg-3">
+                
+                <div class="card">
+                    <div class="card-body p-4 text-center">
+                        <span class="avatar avatar-xl mb-3 rounded" style="background-image: url('{{ user.profile.profile_pic.url }}')"></span>
+                        <h3 class="m-0 mb-1"><a href="/account/chat/{{user.id}}">{{user.username}}</a></h3>
+                        <div class="text-muted">{{user.first_name}}</div>
+                        <div class="mt-3">
+                            <span class="badge bg-purple-lt"></span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+     
+{% endblock content %}

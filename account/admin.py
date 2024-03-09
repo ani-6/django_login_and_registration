@@ -22,3 +22,16 @@ class profile_admin(admin.ModelAdmin):
         }),
         )
     list_display = ["user","gender"]
+
+@admin.register(Messages)
+class messages_admin(admin.ModelAdmin):
+    fieldsets = (
+        ('Select User', {
+        'fields': ['sender','receiver']
+        }),
+        ('Pictures', {
+        'classes': ('wide',),
+        'fields': ('message',),
+        }),
+    )
+    list_display = ["sender","receiver","message",]

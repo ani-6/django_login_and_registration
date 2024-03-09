@@ -20,6 +20,9 @@ urlpatterns = [
      path('password-change/', ChangePasswordView.as_view(), name='password_change'),
      path('password-reset/', resetPassword.as_view(), name='password_reset'),
      path('da/', views.deleteAvtar_view, name='da'),
+     path('chats/', views.chats_view, name='chats'),
+     path('chat/<int:id>/', views.chat_view, name='chat'),
+
      re_path(r'^oauth/', include('social_django.urls', namespace='social')),
 
      #apis
