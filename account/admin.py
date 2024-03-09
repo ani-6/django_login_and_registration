@@ -40,7 +40,7 @@ class messages_admin(admin.ModelAdmin):
         'fields': ('message','created_at','last_updated_at'),
         }),
     )
-    search_fields = ('user__username', 'message')
+    search_fields = ('sender__username','receiver__username', 'message')
     list_display = ['sender','receiver','message','created_at']
     readonly_fields = ['sender','receiver','message','created_at','last_updated_at']
 
@@ -55,6 +55,6 @@ class feedback_admin(admin.ModelAdmin):
         'fields': ('comment','created_at','last_updated_at'),
         }),
     )
-    search_fields = ('user__username','change_message')
+    search_fields = ('user__username','comment')
     list_display = ['user','comment','created_at']
     readonly_fields = ['user','email','comment','created_at','last_updated_at']
