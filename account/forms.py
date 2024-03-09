@@ -105,3 +105,19 @@ class updateProfile_form(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_pic', 'gender', 'headline', 'bio']
+
+class messages_form(forms.ModelForm):
+    message = forms.CharField(required=False,widget=forms.Textarea(attrs={'placeholder': 'Type message',
+                                                                          'class': 'form-control', 'rows': 5}))
+
+    class Meta:
+        model = Messages
+        fields = ['message',]
+
+class feedback_form(forms.ModelForm):
+    comment = forms.CharField(required=False,widget=forms.Textarea(attrs={'placeholder': 'Type comment',
+                                                                          'class': 'form-control', 'rows': 5}))
+
+    class Meta:
+        model = Feedback
+        fields = ['comment',]

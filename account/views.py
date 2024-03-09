@@ -4,10 +4,12 @@ from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChan
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .models import *
 from .forms import *
 
@@ -110,6 +112,54 @@ def deleteAvtar_view(request):
 @login_required
 def profile_view(request):
     return render(request, "account/profile.html")
+
+@login_required
+def feedback_view(request):
+    form = feedback_form(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            form = form.save(commit=False)
+            form.user = request.user
+            form.email = request.user.email
+            form.comment = comment
+            form.save()
+            messages.success(request, 'Feedback sent!')
+            return HttpResponseRedirect('/account/feedback/')
+    else:
+        form = form
+    context = {'form':form,}
+    return render(request, 'account/feedback.html',context)
+
+@login_required
+def chats_view(request):
+    users = User.objects.filter(is_active=True).distinct().exclude(username=request.user.username)
+    context = {'pageobj':users,}
+    return render(request, 'account/chats.html',context)
+
+
+@login_required
+def chat_view(request,id):
+    userName = User.objects.get(id=id)
+    print(userName)
+    query = Q() | (Q(sender__exact=request.user) & Q(receiver_id=id)) | (Q(sender_id=id) & Q(receiver__exact=request.user))
+    all_commnets = Messages.objects.filter(query).order_by('created_at').distinct()
+    form = messages_form(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            message = form.cleaned_data['message']
+            form = form.save(commit=False)           
+            form.sender = request.user
+            form.receiver = User.objects.get(id=id)
+            form.message = message
+            form.save()
+            messages.success(request, 'Message sent!')
+            to_url = '/account/chat/'+str(id)
+            return HttpResponseRedirect(to_url)
+    else:
+        form = form
+    context = {'pageobj':all_commnets,'userName':userName,'form':form,}
+    return render(request, 'account/chat.html',context)
 
 #Logout method
 def logoutUser_view(request):

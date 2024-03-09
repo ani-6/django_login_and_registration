@@ -104,7 +104,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <a href="#" class="dropdown-item">Status</a>
                     <a href="{%url 'account:profile'%}" class="dropdown-item">Profile</a>
-                    <a href="#" class="dropdown-item">Feedback</a>
+                    <a href="{% url 'account:feedback' %}" class="dropdown-item">Feedback</a>
                     <div class="dropdown-divider"></div>
                     <a href="{%url 'account:users-settings'%}" class="dropdown-item">Settings</a>
                     <a href="{%url 'account:logout'%}" class="dropdown-item">Logout</a>
@@ -159,6 +159,9 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
+                                    <a class="dropdown-item" href="{% url 'account:chats' %}">
+                                        Chats
+                                    </a>
                                     <a class="dropdown-item" href="{%url 'main:urldownloader'%}">
                                         Upload to drive
                                     </a>
