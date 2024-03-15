@@ -58,12 +58,6 @@ Run this command for http:
 python3 manage.py runserver
 ```
 
-Run this command for https:
-
-```bash
-python3 manage.py runsslserver
-```
-
 ### Access server on 
 
 ```bash
