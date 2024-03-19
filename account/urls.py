@@ -30,6 +30,7 @@ urlpatterns = [
      path('apis/v1/login', userLogin.as_view()),
      path('apis/v1/profile', userProfile.as_view()),
      path('apis/v1/logout', userLogout.as_view()),
+     path('apis/v1/feedback', userFeedback.as_view()),
 
 ] 
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

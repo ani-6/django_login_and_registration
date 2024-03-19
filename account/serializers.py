@@ -19,3 +19,8 @@ class userProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username','first_name','last_name','user_profile']
+
+class userFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = fields = ['comment',]
