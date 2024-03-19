@@ -1,4 +1,4 @@
-django == 5.0.2
+django == 5.0.3
 python-dotenv == 1.0.1
 social-auth-core == 4.5.3
 social-auth-app-django == 5.4.0
