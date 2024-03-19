@@ -30,6 +30,34 @@ class accountProfile(APIView):
         user = request.user
         serializer = accountUserProfileSerializer(user) 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class accountSettings(APIView):
+    def get(self, request):
+        user_profile = request.user.user_profile
+        user_serializer = UserSerializer(request.user)
+        profile_serializer = accountProfileDataSerializer(user_profile)
+        return Response({'user': user_serializer.data, 'profile': profile_serializer.data})
+
+    def put(self, request):
+        user_profile = request.user.user_profile
+        user_serializer = UserSerializer(request.user, data=request.data)
+        profile_serializer = accountProfileDataSerializer(user_profile, data=request.data.get('profile'))
+
+        user_valid = user_serializer.is_valid()
+        profile_valid = profile_serializer.is_valid()
+
+        if user_valid and profile_valid:
+            user_serializer.save()
+            profile_serializer.save()
+            return Response({'message': 'Your profile is updated successfully'}, status=status.HTTP_200_OK)
+        else:
+            errors = {}
+            if not user_valid:
+                errors['user'] = user_serializer.errors
+            if not profile_valid:
+                errors['profile'] = profile_serializer.errors
+
+            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class accountDeleteAvtar(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
