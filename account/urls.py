@@ -5,7 +5,7 @@ from .forms import login_form
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
-#from .apis import *
+from .apis import *
 
 app_name = 'account'
 
@@ -27,8 +27,9 @@ urlpatterns = [
      re_path(r'^oauth/', include('social_django.urls', namespace='social')),
 
      #apis
-     #path('api/v1/login', LoginView.as_view()),
-     #path('api/v1/profile', ProfileAPI.as_view()),
+     path('apis/v1/login', userLogin.as_view()),
+     path('apis/v1/profile', userProfile.as_view()),
+     path('apis/v1/logout', userLogout.as_view()),
 
 ] 
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

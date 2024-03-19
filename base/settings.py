@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',   #Add main app
     'social_django',    #Add Social login app
     'maintenance_mode',    #Maintenance mode
+    'rest_framework',   #rest api
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -192,3 +194,12 @@ MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 MAINTENANCE_MODE_IGNORE_IP_ADDRESSES = ()
 MAINTENANCE_MODE_LOGOUT_AUTHENTICATED_USER = False
 MAINTENANCE_MODE_TEMPLATE = "error-maintenance.html"
+
+#Rest Api
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
