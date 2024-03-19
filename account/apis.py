@@ -1,5 +1,6 @@
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework import generics, permissions, status
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
@@ -7,7 +8,6 @@ from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from .serializers import *
 from .views import *
-from .processors import *
 
 
 class accountLogin(APIView):
@@ -68,6 +68,26 @@ class accountDeleteAvtar(APIView):
         profile.profile_pic = "Account/profile_images/default.jpg"
         profile.save()
         return Response({'message': 'Avatar deleted successfully'}, status=status.HTTP_200_OK)
+
+class accountChangePassword(APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            old_password = serializer.validated_data.get('old_password')
+            new_password = serializer.validated_data.get('new_password')
+
+            if not check_password(old_password, user.password):
+                return Response({'error': 'Old password is incorrect'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(new_password)
+            user.save()
+            return Response({'message': 'Password changed successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class accountLogout(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]

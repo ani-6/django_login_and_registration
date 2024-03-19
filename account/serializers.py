@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name','last_name')
+        fields = ['username', 'email', 'first_name','last_name']
         read_only_fields = ('username',)
 
 class accountProfileDataSerializer(serializers.ModelSerializer):
@@ -27,3 +27,7 @@ class accountFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = fields = ['comment',]
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
