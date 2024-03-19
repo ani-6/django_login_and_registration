@@ -8,19 +8,19 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'password')
 
-class profileDataSerializer(serializers.ModelSerializer):
+class accountProfileDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['profile_pic','cover_pic','gender','headline','bio','remote_fol_id']
 
-class userProfileSerializer(serializers.ModelSerializer):
-    user_profile = profileDataSerializer()
+class accountUserProfileSerializer(serializers.ModelSerializer):
+    user_profile = accountProfileDataSerializer()
 
     class Meta:
         model = User
         fields = ['username','first_name','last_name','user_profile']
 
-class userFeedbackSerializer(serializers.ModelSerializer):
+class accountFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = fields = ['comment',]

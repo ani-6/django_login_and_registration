@@ -27,10 +27,10 @@ urlpatterns = [
      re_path(r'^oauth/', include('social_django.urls', namespace='social')),
 
      #apis
-     path('apis/v1/login', userLogin.as_view()),
-     path('apis/v1/profile', userProfile.as_view()),
-     path('apis/v1/logout', userLogout.as_view()),
-     path('apis/v1/feedback', userFeedback.as_view()),
+     path('apis/v1/login', accountLogin.as_view()),
+     path('apis/v1/profile', accountProfile.as_view()),
+     path('apis/v1/logout', accountLogout.as_view()),
+     path('apis/v1/feedback', accountFeedback.as_view()),
 
 ] 
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

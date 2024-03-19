@@ -4,15 +4,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from .serializers import *
 from .views import *
 from .processors import *
 
-class UserRegistrationView(generics.CreateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
 
-class userLogin(APIView):
+class accountLogin(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.AllowAny]
 
@@ -24,27 +22,26 @@ class userLogin(APIView):
         else:
             return Response({'error': 'Invalid credentials'}, status=401)
         
-class userProfile(APIView):
+class accountProfile(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):  
         user = request.user
-        serializer = userProfileSerializer(user) 
+        serializer = accountUserProfileSerializer(user) 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class userDeleteAvtar(APIView):
+class accountDeleteAvtar(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        try:
-            user = request.user
-            deleteAvtar_view(user)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    def post(self, request):
+        profile = get_object_or_404(Profile, user=request.user)
+        profile.profile_pic = "Account/profile_images/default.jpg"
+        profile.save()
+        return Response({'message': 'Avatar deleted successfully'}, status=status.HTTP_200_OK)
 
-class userLogout(APIView):
+class accountLogout(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
@@ -55,12 +52,12 @@ class userLogout(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-class userFeedback(APIView):
+class accountFeedback(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     
     def post(self, request, *args, **kwargs):
-        serializer = userFeedbackSerializer(data=request.data)
+        serializer = accountFeedbackSerializer(data=request.data)
         if serializer.is_valid():
             # Set user to the current authenticated user
             serializer.validated_data['user'] = request.user
