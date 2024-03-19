@@ -20,14 +20,14 @@
             <div class="card">
                 <a class="card card-link" href="#">
                     <div class="card-cover card-cover-blurred text-center"
-                        style="background-image: url('{{ user.profile.cover_pic.url }}')">
+                        style="background-image: url('{{ user.user_profile.cover_pic.url }}')">
                         <span class="avatar avatar-xl avatar-thumb avatar-rounded"
-                            style="background-image: url('{{ user.profile.profile_pic.url }}')"></span>
+                            style="background-image: url('{{ user.user_profile.profile_pic.url }}')"></span>
                     </div>
                     <div class="card-body text-center">
                         <div class="card-title mb-1">{{user.first_name.title}} {{user.last_name}}</div>
-                        <div class="text-muted">{{user.profile.headline}}</div>
-                        <div class="text-muted">{{user.profile.bio|linebreaks}}</div>
+                        <div class="text-muted">{{user.user_profile.headline}}</div>
+                        <div class="text-muted">{{user.user_profile.bio|linebreaks}}</div>
                     </div>
                 </a>
             </div>
