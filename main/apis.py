@@ -12,6 +12,10 @@ class mainHome(APIView):
 
     def get(self, request):
         try:
+            my_date = datetime.now()
+            formatted_date = my_date.strftime("%a, %Y-%m-%d")
+            user_ip = request.META.get('REMOTE_ADDR')
+            
             user = request.user
             important_links = Home_ImportantLinks.objects.filter(user=user)
             latest_updates = Home_LatestUpdates.objects.filter(user=user)
@@ -20,6 +24,8 @@ class mainHome(APIView):
             latest_updates_serializer = mainLatestUpdateSerializer(latest_updates, many=True)
 
             data = {
+                'formatted_date' : formatted_date,
+                'user_ip' : user_ip,
                 'important_links': important_links_serializer.data,
                 'latest_updates': latest_updates_serializer.data
             }
