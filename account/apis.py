@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from .serializers import *
 from .views import *
@@ -15,12 +15,20 @@ class accountLogin(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
+        auth = request.data['authmethod']
         user = authenticate(username=request.data['username'], password=request.data['password'])
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+        if auth == 'session':
+            if user is not None:
+                login(request, user)
+                return Response({'detail': 'Login successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error': 'Invalid credentials'}, status=401)
+            if user:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key})
+            else:
+                return Response({'error': 'Invalid credentials'}, status=401)
         
 class accountProfile(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
@@ -32,6 +40,9 @@ class accountProfile(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class accountSettings(APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [permissions.AllowAny]
+
     def get(self, request):
         user_profile = request.user.user_profile
         user_serializer = UserSerializer(request.user)
@@ -92,13 +103,19 @@ class accountChangePassword(APIView):
 class accountLogout(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-
+ 
     def post(self, request):
-        try:
-            request.user.auth_token.delete()
-            return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if isinstance(request.auth, SessionAuthentication):
+            # Logout for session authentication
+            logout(request)
+            return Response({'detail': 'Session logout successful'}, status=status.HTTP_200_OK)
+        elif isinstance(request.auth, TokenAuthentication):
+            # Logout for token authentication
+            token = request.auth
+            token.delete()
+            return Response({'detail': 'Token logout successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Authentication type not supported'}, status=status.HTTP_400_BAD_REQUEST)
         
 class accountFeedback(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]

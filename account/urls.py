@@ -29,6 +29,7 @@ urlpatterns = [
      #apis
      path('apis/v1/login', accountLogin.as_view()),
      path('apis/v1/profile', accountProfile.as_view()),
+     path('apis/v1/delete-avtar',accountDeleteAvtar.as_view()),
      path('apis/v1/logout', accountLogout.as_view()),
      path('apis/v1/feedback', accountFeedback.as_view()),
      path('apis/v1/settings', accountSettings.as_view()),
