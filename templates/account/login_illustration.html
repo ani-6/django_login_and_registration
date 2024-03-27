@@ -1,0 +1,190 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" type="image/svg" href="{% static 'logo-small.svg' %}" />
+    <title>Login To The Hub!</title>
+    <!-- CSS files -->
+    <link href="{% static 'uiCore/css/tabler.min.css?1692870487' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/tabler-flags.min.css?1692870487' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/tabler-payments.min.css?1692870487' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/tabler-vendors.min.css?1692870487' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/demo.min.css?1692870487' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
+</head>
+
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="shadow-lg border-0 ">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                    </div>
+                    <div>
+                        {{ message }}
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                            <path d="M12 8v4" />
+                            <path d="M12 16h.01" />
+                        </svg>
+                    </div>
+                    <div>
+                        {% for key, value in form.errors.items %}
+                        <strong>{{ value }}</strong>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<body class=" d-flex flex-column">
+    <script src="{% static 'js/demo-theme.min.js?1692870487' %}"></script>
+    <div class="page page-center">
+        <div class="container container-normal py-4">
+            <div class="row align-items-center g-4">
+                <div class="col-lg d-none d-lg-block">
+                    <img src="{% static 'illustrations/undraw_secure_login_pdn4.svg' %}" height="300"
+                        class="d-block mx-auto" alt="">
+                </div>
+                <div class="col-lg">
+                    <div class="container-tight">
+                        <div class="text-center mb-4">
+                            <a href="." class="navbar-brand navbar-brand-autodark"><img src="{% static 'logo.svg' %}"
+                                    height="36" alt=""></a>
+                        </div>
+                        <div class="card card-md">
+                            <div class="card-body">
+                                <h2 class="h2 text-center mb-4">Login to your account</h2>
+                                <form action="" method="POST" autocomplete="off" novalidate>
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
+                                        {{form.username}}
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            Password
+                                            <span class="form-label-description">
+                                                <a href="{% url 'account:password_reset' %}">I forgot password</a>
+                                            </span>
+                                        </label>
+                                        <div class="input-group input-group-flat">
+                                            {{form.password}}
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-check">
+                                            {{ form.remember_me }}
+                                            <span class="form-check-label">Remember me on this device</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="hr-text">or</div>
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="{% url 'social:begin' 'github' %}" class="btn w-100">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path
+                                                        d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+                                                </svg>
+                                                Login with Github
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn w-100">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/brand-google -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="icon icon-tabler icons-tabler-outline icon-tabler-brand-google">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path
+                                                        d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+                                                </svg>
+                                                Login with Google
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="text-center text-secondary mt-3">
+                            Don't have account yet? <a href="{% url 'account:users-register' %}" tabindex="-1">Sign
+                                up</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="{% static 'uiCore/js/tabler.min.js?1692870487' %}" defer></script>
+    <script src="{% static 'uiCore/js/demo.min.js?1692870487' %}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- A plugin for password show/hide  -->
+    <script src="https://unpkg.com/bootstrap-show-password@1.2.1/dist/bootstrap-show-password.min.js"></script>
+</body>

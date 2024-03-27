@@ -11,7 +11,7 @@ app_name = 'account'
 
 urlpatterns = [
      #Account
-     path('login/', customLogin.as_view(redirect_authenticated_user=True, template_name='account/login_cover.html',
+     path('login/', customLogin.as_view(redirect_authenticated_user=True, template_name='account/login_illustration.html',
                                              authentication_form=login_form), name='login'),
      path('logout/', views.logoutUser_view, name='logout'),
      path('register/', registerView.as_view(), name='users-register'),
