@@ -10,7 +10,7 @@ class Profile(models.Model):
         ('Female','Female'),
         ('Other','Other')
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="user_profile")
     profile_pic = models.ImageField(default='Account/profile_images/default.jpg', upload_to='Account/profile_images',null=True,blank=True,verbose_name="Profile Picture")
     cover_pic = models.ImageField(default='Account/cover_images/_default.jpg', upload_to='Account/cover_images',null=True,blank=True,verbose_name="Cover Picture")
     gender = models.CharField(max_length=50, null=True,choices=GENDER)

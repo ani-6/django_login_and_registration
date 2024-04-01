@@ -86,7 +86,7 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
 def settings_view(request):
     if request.method == 'POST':
         user_form = updateUser_form(request.POST, instance=request.user)
-        profile_form = updateProfile_form(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = updateProfile_form(request.POST, request.FILES, instance=request.user.user_profile)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -95,7 +95,7 @@ def settings_view(request):
             return redirect(to='account:users-settings')
     else:
         user_form = updateUser_form(instance=request.user)
-        profile_form = updateProfile_form(instance=request.user.profile)
+        profile_form = updateProfile_form(instance=request.user.user_profile)
 
     return render(request, 'account/settings.html', {'user_form': user_form, 'profile_form': profile_form})
 
