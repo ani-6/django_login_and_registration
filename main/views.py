@@ -43,13 +43,24 @@ def imageGallery_view(request):
 #Main Gallery
 @login_required
 def localGallery_view(request):
-    statpath = "media/Main/gallery/"
-    img_list=os.listdir(statpath)
-    for img in img_list[:]: 
-        if not(img.endswith(".jpg") or img.endswith(".jpeg")):
-            img_list.remove(img)
-    context = {"images": img_list, "mediaPath": statpath, }
-    return render(request, "main/local_gallery.html", context)
+    # Path to the directory you want to scan
+    directory_path = 'media/Main/gallery/'
+
+    # Get a list of all files in the specified directory
+    directory_contents = [file for file in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, file))]
+
+    # Filter out only image files
+    image_extensions = ['.jpg', '.jpeg', '.png']
+    image_files = [file for file in directory_contents if os.path.splitext(file)[1].lower() in image_extensions]
+
+    # Pagination
+    paginator = Paginator(image_files, 8)  # Show 8 images per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj,'dir_path': directory_path}
+
+    return render(request, 'main/local_gallery.html', context)
 
 #File downloader  
 @login_required  
