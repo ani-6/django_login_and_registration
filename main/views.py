@@ -72,14 +72,14 @@ def downlaodUrlToGdrive_view(request):
     if request.method == 'POST':
         if form.is_valid():
             url = form.cleaned_data['local_path']
-            if (url != None and url != ''):
+            if (url != None and url != '' and url.startswith("http")):
                 file = url.split("/")[-1]
                 if IfDriveObjectExists(request.user,file,url):
                     messages.info(request, file +' already downloaded.')
                 else:     
                     fullfilepath = path+file     
                     if downlaod_file(url,fullfilepath):
-                        folderid = request.user.profile.remote_fol_id
+                        folderid = request.user.user_profile.remote_fol_id
                         ext = file.split(".")[-1]
                         mimetype = get_mimeType(ext)
                         data = UploadToDrive(fullfilepath,folderid,mimetype)
@@ -94,6 +94,10 @@ def downlaodUrlToGdrive_view(request):
                         messages.success(request, 'File downloaded sucsessfullty : '+file)
                         os.remove(fullfilepath)   
                         return HttpResponseRedirect('/urldownloader/')
+                    else:
+                        messages.warning(request,'Something went wrong.')
+            else:
+                messages.warning(request,'Provide a valid url.')
     context = {'list':list,'form':form,'allfiles':allfiles}
     return render(request, "main/urltodrive.html",context)
 
