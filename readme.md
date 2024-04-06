@@ -63,3 +63,11 @@ python3 manage.py runserver
 ```bash
 localhost:8000
 ```
+
+### <summary>Screenshots</summary>
+
+<img src="Screenshots/Screenshot 2024-04-06 165256.png" height="auto" width="800">
+<img src="Screenshots/Screenshot 2024-04-06 170051.png" height="auto" width="800">
+<img src="Screenshots/Screenshot 2024-04-06 165937.png" height="auto" width="800">
+<img src="Screenshots/Screenshot 2024-04-06 165956.png" height="auto" width="800">
+<img src="Screenshots/Screenshot 2024-04-06 170016.png" height="auto" width="800">
