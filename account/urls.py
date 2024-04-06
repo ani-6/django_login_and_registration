@@ -1,8 +1,7 @@
 from django.urls import path, include, re_path
 from .views import *
 from . import views
-from .forms import login_form
-from django.contrib.auth import views as auth_views
+from .forms import *
 from django.conf.urls.static import static
 from django.conf import settings
 from .apis import *
@@ -11,8 +10,7 @@ app_name = 'account'
 
 urlpatterns = [
      #Account
-     path('login/', customLogin.as_view(redirect_authenticated_user=True, template_name='account/login_illustration.html',
-                                             authentication_form=login_form), name='login'),
+     path('login/', customLoginView.as_view(), name='login'),
      path('logout/', views.logoutUser_view, name='logout'),
      path('register/', registerView.as_view(), name='users-register'),
      path('profile/', views.profile_view, name='profile'),

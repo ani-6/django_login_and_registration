@@ -53,11 +53,10 @@ class register_form(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
-
-class login_form(AuthenticationForm):
+class customAuthenticationForm(AuthenticationForm):
     username = forms.CharField(max_length=100,
                                required=True,
-                               error_messages={'required': 'Please enter Username!'},
+                               error_messages={'required': 'Please enter Username or Email!'},
                                widget=forms.TextInput(attrs={'placeholder': 'Your Username',
                                                              'class': 'form-control',
                                                              }))
@@ -70,10 +69,9 @@ class login_form(AuthenticationForm):
                                                                  'id': 'password',
                                                                  'name': 'password',
                                                                  }))
-    remember_me = forms.BooleanField(required=False,widget=forms.CheckboxInput(attrs={'class':'form-check-input'}))
-
+    remember_me = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    
     class Meta:
-        model = User
         fields = ['username', 'password', 'remember_me']
 
 class updateUser_form(forms.ModelForm):

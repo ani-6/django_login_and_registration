@@ -6,9 +6,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
-from django.contrib.auth import logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
 from .models import *
 from .forms import *
@@ -45,25 +44,37 @@ class registerView(View):
 
         return render(request, self.template_name, {'form': form})
 
-
 # Class based view that extends from the built in login view to add a remember me functionality
-class customLogin(LoginView):
-    form_class = login_form
+class customLoginView(LoginView):
+    form_class = customAuthenticationForm
+    template_name = 'account/login_illustration.html'
+    redirect_authenticated_user = True
 
-    def form_valid(self, form):
-        remember_me = form.cleaned_data.get('remember_me')
-        if not remember_me:
-            # set session expiry to 0 seconds. So it will automatically close the session after the browser is closed.
-            self.request.session.set_expiry(600)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            username_or_email = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
 
-            # Set session as modified to force data updates/cookie to be saved.
-            self.request.session.modified = True
+            # Try to authenticate using email
+            user = authenticate(request, username=username_or_email, password=password)
+            if user is None:
+                # Try to authenticate using username
+                user = authenticate(request, email=username_or_email, password=password)
+
+            if user is not None:
+                login(request, user)
+                remember_me = form.cleaned_data.get('remember_me')
+                if not remember_me:
+                    request.session.set_expiry(600)
+                    request.session.modified = True
+                else:
+                    request.session['remember_me'] = True
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
         else:
-            self.request.session['remember_me'] = True
-
-        # else browser session will be as long as the session cookie time "SESSION_COOKIE_AGE" defined in settings.py
-        return super(customLogin, self).form_valid(form)
-
+            return self.form_invalid(form)
 
 class resetPassword(SuccessMessageMixin, PasswordResetView):
     template_name = 'account/password_reset.html'
