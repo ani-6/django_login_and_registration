@@ -18,6 +18,7 @@
                 </div>
             </div>
         </form>
+        <div id="file-size-info"></div>
         <hr>
         <h4>Downloaded files</h4>
         {%for file in allfiles%}
@@ -29,4 +30,35 @@
         {%endfor%}
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#id_local_path').on('input', function () {
+            var url = $(this).val().trim();
+            if (url === '') {
+                // Clear file size info if input is empty
+                $('#file-size-info').text('');
+                return; // Exit function early if input is empty
+            }
+            if (!(url.startsWith('http://') || url.startsWith('https://'))) {
+                // Show error message if input is not a valid URL
+                $('#file-size-info').text('Please input a valid URL');
+                return; // Exit function early if input is not a valid URL
+            }
+            $.ajax({
+                url: '{% url "main:get_file_size"%}',
+                method: 'GET',
+                data: { url: url },
+                success: function (data) {
+                    $('#file-size-info').text('File size: ' + data.file_size + ' MB');
+                },
+                error: function () {
+                    $('#file-size-info').text('Error occurred while fetching file size');
+                    // Enable the submit button in case of error
+                    $('#reset').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 {% endblock content %}

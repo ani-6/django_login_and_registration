@@ -16,6 +16,7 @@ urlpatterns = [
      path('localgallery/', localGallery_view, name='localgallery'),
      #Downloader
      path("urldownloader/", downlaodUrlToGdrive_view, name="urldownloader"),
+     path("get-file-size", get_file_size, name="get_file_size"),
 
      #Apis
      path('apis/v1/home', mainHome.as_view()),

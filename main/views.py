@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from datetime import datetime
 from .helpers import *
 from .models import *
@@ -62,6 +62,20 @@ def localGallery_view(request):
 
     return render(request, 'main/local_gallery.html', context)
 
+def get_file_size(request):
+    url = request.GET.get('url')
+    try:
+        response = requests.head(url)
+        if response.status_code == 200:
+            content_length = response.headers.get('Content-Length')
+            file_size_bytes = int(content_length) if content_length else None
+            file_size_mb = round(file_size_bytes / (1024 * 1024), 2) if file_size_bytes is not None else None
+            return JsonResponse({'file_size': file_size_mb})
+        else:
+            return JsonResponse({'error': 'Invalid URL'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
 #File downloader  
 @login_required  
 def downlaodUrlToGdrive_view(request):
