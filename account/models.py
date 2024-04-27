@@ -1,3 +1,4 @@
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
@@ -21,12 +22,15 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-    # resizing images
-    def save(self, *args, **kwargs):
-        super().save()
-
-        img = Image.open(self.profile_pic.path)        
-        img.save(self.profile_pic.path)
+    def thumbnail_url(self):
+        # Check if the profile picture is set and is not default.png
+        if self.profile_pic and os.path.basename(self.profile_pic.name) != 'default.jpg':
+            # Generate the thumbnail path
+            thumbnail_path = '/media/Account/profile_images/thumbnail_' + os.path.basename(self.profile_pic.name)
+            return thumbnail_path
+        else:
+            # Return the original profile picture URL
+            return self.profile_pic.url
 
 class Messages(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Sender")

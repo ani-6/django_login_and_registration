@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import login, authenticate, logout
 from django.db.models import Q
+from .helpers import generate_thumbnail, delete_old_image
+import os
 from .models import *
 from .forms import *
 
@@ -95,13 +97,21 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
 
 @login_required
 def settings_view(request):
+    old_profile_pic = request.user.user_profile.profile_pic.path
     if request.method == 'POST':
         user_form = updateUser_form(request.POST, instance=request.user)
         profile_form = updateProfile_form(request.POST, request.FILES, instance=request.user.user_profile)
-
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
-            profile_form.save()
+            profile = profile_form.save(commit=False)
+            # Check if a new profile picture is uploaded
+            if 'profile_pic' in request.FILES:
+                profile.save()
+                # Generate thumbnail
+                generate_thumbnail(profile.profile_pic.path)
+                delete_old_image(old_profile_pic)
+            else:
+                profile.save()
             messages.success(request, 'Your profile is updated successfully')
             return redirect(to='account:users-settings')
     else:
@@ -114,7 +124,9 @@ def settings_view(request):
 @login_required 
 def deleteAvtar_view(request):
     profile = Profile.objects.get(user=request.user)
+    old_profile_pic = request.user.user_profile.profile_pic.path
     profile.profile_pic = "Account/profile_images/default.jpg"
+    delete_old_image(old_profile_pic)
     profile.save()
     messages.success(request, 'Avtar deleted successfully')
     return redirect(to='account:users-settings')
