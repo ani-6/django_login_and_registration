@@ -1,11 +1,12 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import get_object_or_404
+from rest_framework import permissions, status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from rest_framework import generics, permissions, status
-from django.contrib.auth.hashers import check_password, make_password
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate, login
-from django.shortcuts import get_object_or_404
+
 from .serializers import *
 from .views import *
 

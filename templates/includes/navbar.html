@@ -8,7 +8,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <a href="/">
+            <a href="{{ HOMEURL }}">
                 <img src="{% static 'logo.png' %}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
             </a>
         </h1>
@@ -66,7 +66,7 @@
                                         <div class="col text-truncate">
                                             <a href="{% url 'main:notifications' %}" class="text-body d-block">{{ announcement.title|safe }}</a>
                                             <div class="d-block text-secondary text-truncate mt-n1">
-                                                {{ announcement.body|safe }}
+                                                {{ announcement.description|safe }}
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -174,7 +174,7 @@
                     </li>
                 </ul>
                 <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                    <form action="./" method="get" autocomplete="off" novalidate>
+                    <form  autocomplete="off" novalidate>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
@@ -186,7 +186,7 @@
                                     <path d="M21 21l-6 -6" />
                                 </svg>
                             </span>
-                            <input type="text" value="" class="form-control" placeholder="Search…"
+                            <input id="user-input" type="text" value="" class="form-control" placeholder="Search…"
                                 aria-label="Search in website">
                         </div>
                     </form>

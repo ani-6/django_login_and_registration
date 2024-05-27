@@ -9,11 +9,9 @@
     <link rel="icon" type="image/svg" href="{% static 'logo-small.svg' %}">
     <title>{% block title %} {% endblock %} </title>
     <!-- CSS files -->
-    <link href="{% static 'uiCore/css/tabler.min.css?1692870487' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/tabler-flags.min.css?1692870487' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/tabler-payments.min.css?1692870487' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/tabler-vendors.min.css?1692870487' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/demo.min.css?1692870487' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/tabler.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/tabler-vendors.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'uiCore/css/demo.min.css' %}" rel="stylesheet" />
     <link href="{% static 'uiCustom/css/app.css' %}" rel="stylesheet" />
     <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -32,7 +30,7 @@
 
 <body>
     <!-- Add script for darkmode-->
-    <script src="{% static 'uiCore/js/demo-theme.min.js?1692870487' %}"></script>
+    <script src="{% static 'uiCore/js/demo-theme.min.js' %}"></script>
     <div class="page">
         <!--Any flash messages pop up in any page because this is the base template-->
         {% if user.is_authenticated %}
@@ -110,8 +108,8 @@
         
         <script src="/static/uiCustom/js/main.js"></script>
         <!-- Tabler Core -->
-        <script src="{% static 'uiCore/js/tabler.min.js?1692870487' %}" defer></script>
-        <script src="{% static 'uiCore/js/demo.min.js?1692870487' %}" defer></script>
+        <script src="{% static 'uiCore/js/tabler.min.js' %}" defer></script>
+        <script src="{% static 'uiCore/js/demo.min.js' %}" defer></script>
     </div>
 </body>
 

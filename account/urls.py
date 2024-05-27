@@ -1,10 +1,11 @@
-from django.urls import path, include, re_path
-from .views import *
-from . import views
-from .forms import *
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import include, path, re_path
+
+from . import views
 from .apis import *
+from .forms import *
+from .views import *
 
 app_name = 'account'
 

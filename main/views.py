@@ -1,14 +1,18 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib import messages
-from django.http import HttpResponseRedirect, JsonResponse
 from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+
+from .forms import *
 from .helpers import *
 from .models import *
-from .forms import *
 from .services import *
 from base.Gdrive.gdriveOps import *
+from main.context_processors import settings_variable_processor
 
 # Create your views here.
 @login_required
@@ -19,7 +23,7 @@ def home_view(request):
         user_ip = get_ip_address(request)
         pagedata = get_ImportantLinks(request.user,True)
         updates = get_LatestUpdates(request.user)
-        context = {'user_ip':user_ip, 'date':formatedDate,'data':pagedata,'updates': updates}
+        context = {'user_ip':user_ip, 'date':formatedDate,'data':pagedata,'updates': updates,}
         return render(request,"main/index.html", context)  
     except:
         return render (request, "error-404.html")
@@ -44,14 +48,18 @@ def imageGallery_view(request):
 @login_required
 def localGallery_view(request):
     # Path to the directory you want to scan
-    directory_path = 'media/Main/gallery/'
+    directory_full_path = os.path.join(settings.BASE_DIR, 'media/Main/gallery/')
 
     # Get a list of all files in the specified directory
-    directory_contents = [file for file in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, file))]
+    directory_contents = [file for file in os.listdir(directory_full_path) if os.path.isfile(os.path.join(directory_full_path, file))]
 
     # Filter out only image files
     image_extensions = ['.jpg', '.jpeg', '.png']
     image_files = [file for file in directory_contents if os.path.splitext(file)[1].lower() in image_extensions]
+
+    # Concate path for template
+    index_media = directory_full_path.find('media')
+    directory_path = directory_full_path[index_media:]
 
     # Pagination
     paginator = Paginator(image_files, 8)  # Show 8 images per page
@@ -81,11 +89,11 @@ def get_file_size(request):
 def downlaodUrlToGdrive_view(request):
     allfiles = get_AllDriveObjects(request.user)
     form = urlToGdrive_form(request.POST)
-    path = "media/Main/downloads/"
+    path =  os.path.join(settings.BASE_DIR,'media/Main/downloads/')
 
     if request.method == 'POST':
         if form.is_valid():
-            url = form.cleaned_data['local_path']
+            url = form.cleaned_data['source_path']
             if (url != None and url != '' and url.startswith("http")):
                 file = url.split("/")[-1]
                 if IfDriveObjectExists(request.user,file,url):
@@ -93,21 +101,23 @@ def downlaodUrlToGdrive_view(request):
                 else:     
                     fullfilepath = path+file     
                     if downlaod_file(url,fullfilepath):
-                        folderid = request.user.user_profile.remote_fol_id
+                        folderid = request.user.user_profile.remote_folder_id
                         ext = file.split(".")[-1]
                         mimetype = get_mimeType(ext)
                         data = UploadToDrive(fullfilepath,folderid,mimetype)
                         urld = form.save(commit=False)           
                         urld.user = request.user
-                        urld.filename = file
-                        urld.original_path = url
-                        urld.fileid = data['FileID']  
-                        urld.folderid = data['FolderID']         
-                        urld.shared = data['Shared']     
+                        urld.file_name = file
+                        urld.source_path = url
+                        urld.file_id = data['FileID']  
+                        urld.folder_id = data['FolderID']         
+                        urld.is_shared = data['Shared']     
                         urld.save()
                         messages.success(request, 'File downloaded sucsessfullty : '+file)
-                        os.remove(fullfilepath)   
-                        return HttpResponseRedirect('/urldownloader/')
+                        os.remove(fullfilepath)
+                        context_value = settings_variable_processor(request)
+                        home_url = context_value['HOMEURL']
+                        return HttpResponseRedirect(f"{home_url}/urldownloader/")
                     else:
                         messages.warning(request,'Something went wrong.')
             else:
@@ -120,3 +130,19 @@ def notifications_view(request):
     objects = get_Announcements()
     context = {'objects':objects}
     return render(request, "main/notifications.html",context)
+
+# Custom error views
+def custom_404_view(request, exception):
+    return render(request, 'error-404.html', status=404)
+
+def custom_500_view(request):
+    return render(request, 'error-500.html', status=500)
+
+def custom_503_view(request, exception):
+    return render(request, 'error-maintenance.html', status=503)
+
+def custom_403_view(request, exception):
+    return render(request, '403.html', status=403)
+
+def custom_400_view(request, exception):
+    return render(request, '400.html', status=400)

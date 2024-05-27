@@ -16,7 +16,7 @@ class profile_admin(admin.ModelAdmin):
         }),
         ('Pictures', {
         'classes': ('wide',),
-        'fields': ('profile_pic', 'cover_pic'),
+        'fields': ('profile_picture', 'cover_picture'),
         }),
         ('Other Details', {
         'classes': ('wide',),
@@ -24,7 +24,7 @@ class profile_admin(admin.ModelAdmin):
         }),
         ('Remote Storage Details', {
         'classes': ('wide',),
-        'fields': ['remote_fol_id'],
+        'fields': ['remote_folder_id'],
         }),
         )
     list_display = ['user','gender']

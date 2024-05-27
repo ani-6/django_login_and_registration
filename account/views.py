@@ -1,18 +1,21 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView
-from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views import View
-from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import login, authenticate, logout
-from django.db.models import Q
-from .helpers import generate_thumbnail, delete_old_image
 import os
-from .models import *
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+
 from .forms import *
+from .helpers import generate_thumbnail, delete_old_image
+from .models import *
 
 # Create your views here.
 class registerView(View):
@@ -97,7 +100,7 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
 
 @login_required
 def settings_view(request):
-    old_profile_pic = request.user.user_profile.profile_pic.path
+    old_profile_pic = request.user.user_profile.profile_picture.path
     if request.method == 'POST':
         user_form = updateUser_form(request.POST, instance=request.user)
         profile_form = updateProfile_form(request.POST, request.FILES, instance=request.user.user_profile)
@@ -105,10 +108,10 @@ def settings_view(request):
             user_form.save()
             profile = profile_form.save(commit=False)
             # Check if a new profile picture is uploaded
-            if 'profile_pic' in request.FILES:
+            if 'profile_picture' in request.FILES:
                 profile.save()
                 # Generate thumbnail
-                generate_thumbnail(profile.profile_pic.path)
+                generate_thumbnail(profile.profile_picture.path)
                 delete_old_image(old_profile_pic)
             else:
                 profile.save()
@@ -124,8 +127,8 @@ def settings_view(request):
 @login_required 
 def deleteAvtar_view(request):
     profile = Profile.objects.get(user=request.user)
-    old_profile_pic = request.user.user_profile.profile_pic.path
-    profile.profile_pic = "Account/profile_images/default.jpg"
+    old_profile_pic = request.user.user_profile.profile_picture.path
+    profile.profile_picture = os.path.join(settings.BASE_DIR,'Account/profile_images/default.jpg')
     delete_old_image(old_profile_pic)
     profile.save()
     messages.success(request, 'Avtar deleted successfully')

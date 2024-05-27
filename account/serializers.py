@@ -10,11 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('username',)
 
 class accountProfileDataSerializer(serializers.ModelSerializer):
-    profile_pic = serializers.ImageField(max_length=None, use_url=True, required=False, allow_null=True, allow_empty_file=True)
+    profile_picture = serializers.ImageField(max_length=None, use_url=True, required=False, allow_null=True, allow_empty_file=True)
     
     class Meta:
         model = Profile
-        fields = ['profile_pic','cover_pic','gender','headline','bio']
+        fields = ['profile_picture','cover_pic','gender','headline','bio']
 
 class accountUserProfileSerializer(serializers.ModelSerializer):
     user_profile = accountProfileDataSerializer()

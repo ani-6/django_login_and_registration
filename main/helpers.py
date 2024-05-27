@@ -1,4 +1,5 @@
-import json, requests
+import os, json, requests
+from django.conf import settings
 
 # fetch remote ip
 def get_ip_address(request):
@@ -10,7 +11,7 @@ def get_ip_address(request):
     return ip
 
 def get_mimeType(find):
-    f = open('base/static/data/mimetype.json')
+    f = open(os.path.join(settings.BASE_DIR,'base/static/data/mimetype.json'))
     data = json.load(f)
     return data[find]
 

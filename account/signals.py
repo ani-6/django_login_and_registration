@@ -1,10 +1,10 @@
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.dispatch import receiver
-from .models import Profile
 from base.Gdrive.gdriveOps import *
-from dotenv import load_dotenv
-load_dotenv()
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from .models import Profile
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -18,9 +18,9 @@ def save_profile(sender, instance, **kwargs):
 @receiver(post_save, sender=Profile)
 def update_profile(sender, instance, created, **kwargs):
     if created:
-        if not instance.remote_fol_id:
+        if not instance.remote_folder_id:
             foldername = instance.user.username
-            parentID = str(os.getenv('DriveFolderId'))
-            instance.remote_fol_id = CreateFolder(foldername,parentID)
+            parentID = settings.GDriveFolderID
+            instance.remote_folder_id = CreateFolder(foldername,parentID)
             instance.save()
  

@@ -3,12 +3,12 @@ from .models import *
 
 class mainImportantLinkSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Home_ImportantLinks
+        model = ImportantLinks
         fields = ['user','heading','description','link','is_active']
 
 class mainLatestUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Home_LatestUpdates
+        model = LatestUpdates
         fields = ['user','update']
 
 class mainHomeSerializer(serializers.ModelSerializer):

@@ -14,11 +14,19 @@ from pathlib import Path
 # To keep secret keys in environment variables
 from dotenv import load_dotenv
 
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent  #Directory loaction of all apps
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Determine the environment and load the correct .env file
+environment = os.getenv('DJANGO_ENV', 'development')
+
+if environment == 'production':
+    dotenv_path = os.path.join(BASE_DIR, '.env.production')
+else:
+    dotenv_path = os.path.join(BASE_DIR, '.env.development')
+
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -27,10 +35,9 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -41,12 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account.apps.AccountConfig',   #Add account app
-    'main.apps.MainConfig',   #Add main app
-    'social_django',    #Add Social login app
-    'maintenance_mode',    #Maintenance mode
-    'rest_framework',   #rest api
-    'rest_framework.authtoken',
+    'account.apps.AccountConfig',   # Add account app
+    'main.apps.MainConfig',   # Add main app
+    'social_django',    # Add Social login app
+    'maintenance_mode',    # Maintenance mode
+    'rest_framework',   # REST API
+    'rest_framework.authtoken', # REST API
 ]
 
 MIDDLEWARE = [
@@ -54,10 +61,11 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.gzip.GZipMiddleware',    # Compression middleware for faster page load
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'maintenance_mode.middleware.MaintenanceModeMiddleware', #Maintenance mode middlerware
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',    # Maintenance mode middlerware
 ]
 
 ROOT_URLCONF = 'base.urls'
@@ -73,11 +81,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #For social Login
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
-                # for notifications
-                'main.context_processors.announcement_context_processor',
+                'social_django.context_processors.backends',    # For social Login
+                'social_django.context_processors.login_redirect',  # For social Login
+                'main.context_processors.announcement_context_processor',   # For notifications
+                'main.context_processors.settings_variable_processor',  # For sub url
             ],
         },
     },
@@ -150,14 +157,24 @@ STATICFILES_DIRS = [
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 
 
-STATIC_ROOT = 'var/www/html/static'
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Custom storage variables.
+GDriveFolderID=os.getenv('DriveFolderId')
 
-LOGIN_REDIRECT_URL = '/'
+
+sub_url = os.getenv('SUBURL', '')
+# If the environment variable is available and not empty
+if sub_url:
+    # Repeat it twice with '/' as a separator
+    LOGIN_REDIRECT_URL = f"/{sub_url}/"
+else:
+    # Otherwise, set it to blank
+    LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = 'account:login'
 
 # Default primary key field type
@@ -194,6 +211,7 @@ MAINTENANCE_MODE_IGNORE_STAFF = False
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 MAINTENANCE_MODE_IGNORE_IP_ADDRESSES = ()
 MAINTENANCE_MODE_LOGOUT_AUTHENTICATED_USER = False
+MAINTENANCE_MODE_STATUS_CODE = 503
 MAINTENANCE_MODE_TEMPLATE = "error-maintenance.html"
 
 #Rest Api
@@ -204,3 +222,42 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+# Define your logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR,'logfile.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# Only enable file logging in production
+if environment == 'production':
+    LOGGING['loggers']['django']['handlers'] = ['file']
+    LOGGING['loggers']['django']['level'] = 'INFO'
+else:
+    LOGGING['loggers']['django']['handlers'] = []
+    LOGGING['loggers']['django']['level'] = 'DEBUG'

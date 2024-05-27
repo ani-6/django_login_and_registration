@@ -1,11 +1,11 @@
 from .models import *
 
 def get_ImportantLinks(user,active):
-    objects = Home_ImportantLinks.objects.filter(user=user,is_active=active)
+    objects = ImportantLinks.objects.filter(user=user, is_active=active)
     return objects
 
 def get_LatestUpdates(user):
-    objects = Home_LatestUpdates.objects.filter(user=user).order_by('-created_at')[:4]
+    objects = LatestUpdates.objects.filter(user=user).order_by('-created_at')[:4]
     return objects
 
 def get_GalleryObjects(user):
@@ -17,7 +17,7 @@ def get_AllDriveObjects(user):
     return objects
 
 def IfDriveObjectExists(user,file,url):
-    exists = UrlToGdrive.objects.filter(user=user,filename=file,original_path=url).exists()
+    exists = UrlToGdrive.objects.filter(user=user, file_name=file, source_path=url).exists()
     return exists
 
 def get_Announcements():
