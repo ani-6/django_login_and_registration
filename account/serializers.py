@@ -14,7 +14,7 @@ class accountProfileDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-        fields = ['profile_picture','cover_pic','gender','headline','bio']
+        fields = ['profile_picture','cover_picture','gender','headline','bio']
 
 class accountUserProfileSerializer(serializers.ModelSerializer):
     user_profile = accountProfileDataSerializer()

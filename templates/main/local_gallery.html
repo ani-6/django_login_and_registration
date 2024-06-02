@@ -27,9 +27,9 @@
                     {% for obj in page_obj %}
                     <!-- Image -->
                     <div class="col-6 col-md-6 col-lg-3" data-aos="zoom-in">
-                        <a href="/{{dir_path}}{{ obj }}" class="d-block photo-item" data-fancybox="gallery"
+                        <a href="{% url 'main:serve_media' dir_path|add:obj %}" class="d-block photo-item" data-fancybox="gallery"
                             data-caption="{{obj.caption}}">
-                            <img loading="lazy" src="/{{dir_path}}/thumb/{{ obj }}" alt="" title="" /><!-- thumb path -->
+                            <img loading="lazy" src="{% url 'main:serve_media' dir_path|add:'thumb/'|add:obj %}" alt="" title="" /><!-- thumb path -->
                             <div class="photo-text-more">
                                 <span class="icon icon-search"><svg xmlns="http://www.w3.org/2000/svg" class="icon"
                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"

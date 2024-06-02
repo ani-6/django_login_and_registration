@@ -7,7 +7,7 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6">
             <div class="profile-card">
-                <div class="profile-card-header" style="background-image: url('{{ user.user_profile.cover_picture.url }}')">
+                <div class="profile-card-header" style="background-image: url('{% url "main:serve_media" user.user_profile.cover_picture.name %}')">
                     <div class="profile-pic">
                         <img src='{{ user.user_profile.profile_picture.url }}' alt="">
                     </div>

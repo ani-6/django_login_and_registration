@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, Http404, FileResponse
 from django.shortcuts import render
 
 from .forms import *
@@ -15,6 +15,15 @@ from base.Gdrive.gdriveOps import *
 from main.context_processors import settings_variable_processor
 
 # Create your views here.
+@login_required
+def serve_main_media_view(request, path):
+    media_path = os.path.join(settings.MEDIA_ROOT, path)
+    
+    if not os.path.exists(media_path):
+        raise Http404("File does not exist")
+    
+    return FileResponse(open(media_path, 'rb'))
+
 @login_required
 def home_view(request):
     try:
@@ -58,7 +67,7 @@ def localGallery_view(request):
     image_files = [file for file in directory_contents if os.path.splitext(file)[1].lower() in image_extensions]
 
     # Concate path for template
-    index_media = directory_full_path.find('media')
+    index_media = directory_full_path.find('Main')
     directory_path = directory_full_path[index_media:]
 
     # Pagination
@@ -142,7 +151,7 @@ def custom_503_view(request, exception):
     return render(request, 'error-maintenance.html', status=503)
 
 def custom_403_view(request, exception):
-    return render(request, '403.html', status=403)
+    return render(request, 'error-403.html', status=403)
 
 def custom_400_view(request, exception):
     return render(request, '400.html', status=400)

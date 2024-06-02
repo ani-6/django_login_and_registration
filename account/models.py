@@ -1,5 +1,6 @@
 import os
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -25,11 +26,11 @@ class Profile(models.Model):
         # Check if the profile picture is set and is not default.png
         if self.profile_picture and os.path.basename(self.profile_picture.name) != 'default.jpg':
             # Generate the thumbnail path
-            thumbnail_path = '/media/Account/profile_images/thumbnail_' + os.path.basename(self.profile_picture.name)
+            thumbnail_path = settings.LOGIN_REDIRECT_URL + 'secure_media/Account/profile_images/thumbnail_' + os.path.basename(self.profile_picture.name)
             return thumbnail_path
         else:
             # Return the original profile picture URL
-            return self.profile_picture.url
+            return settings.LOGIN_REDIRECT_URL + 'secure_media/' + self.profile_picture.name
 
 class Messages(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Sender")

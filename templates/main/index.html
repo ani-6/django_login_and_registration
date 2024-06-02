@@ -20,7 +20,17 @@
                     Dashboard
                 </h2>
             </div>
-            <!-- Page title actions -->
+            {% if user.is_staff %}
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <span class="d-none d-sm-inline">
+                        <a href="{{ HOMEURL }}admin" class="btn">
+                            Admin panel
+                        </a>
+                    </span>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

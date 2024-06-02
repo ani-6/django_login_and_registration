@@ -20,7 +20,7 @@ def update_profile(sender, instance, created, **kwargs):
     if created:
         if not instance.remote_folder_id:
             foldername = instance.user.username
-            parentID = settings.GDriveFolderID
+            parentID = settings.GDRIVEFOLDERID
             instance.remote_folder_id = CreateFolder(foldername,parentID)
             instance.save()
  

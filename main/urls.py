@@ -8,6 +8,7 @@ from .views import *
 app_name = 'main'
 
 urlpatterns = [
+     path('secure_media/<path:path>/', serve_main_media_view, name='serve_media'),
      #Main App
      path('', home_view, name='home'),
      #Notifications

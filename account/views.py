@@ -167,7 +167,6 @@ def chats_view(request):
 @login_required
 def chat_view(request,id):
     userName = User.objects.get(id=id)
-    print(userName)
     query = Q() | (Q(sender__exact=request.user) & Q(receiver_id=id)) | (Q(sender_id=id) & Q(receiver__exact=request.user))
     all_commnets = Messages.objects.filter(query).order_by('created_at').distinct()
     form = messages_form(request.POST)
@@ -180,7 +179,7 @@ def chat_view(request,id):
             form.message = message
             form.save()
             messages.success(request, 'Message sent!')
-            to_url = '/account/chat/'+str(id)
+            to_url = settings.LOGIN_REDIRECT_URL +'account/chat/'+str(id)
             return HttpResponseRedirect(to_url)
     else:
         form = form

@@ -95,7 +95,7 @@ class updateUser_form(forms.ModelForm):
 
 
 class updateProfile_form(forms.ModelForm):
-    profile_pic = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control','type':'file'}))
+    profile_picture = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control','type':'file'}))
     headline = forms.CharField(max_length=100,
                                widget=forms.TextInput(attrs={'class': 'form-control'}),required=False)
     bio = forms.CharField(required=False,widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
@@ -103,7 +103,7 @@ class updateProfile_form(forms.ModelForm):
       
     class Meta:
         model = Profile
-        fields = ['profile_pic', 'gender', 'headline', 'bio']
+        fields = ['profile_picture', 'gender', 'headline', 'bio']
 
 class messages_form(forms.ModelForm):
     message = forms.CharField(required=False,widget=forms.Textarea(attrs={'placeholder': 'Type message',

@@ -142,6 +142,15 @@ USE_I18N = True
 
 USE_TZ = True
 
+sub_url = os.getenv('SUBURL', '')
+# If the environment variable is available and not empty
+if sub_url:
+    # Repeat it twice with '/' as a separator
+    LOGIN_REDIRECT_URL = f"/{sub_url}/"
+else:
+    # Otherwise, set it to blank
+    LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'account:login'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -161,21 +170,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = LOGIN_REDIRECT_URL + 'secure_media/'
 
 # Custom storage variables.
-GDriveFolderID=os.getenv('DriveFolderId')
-
-
-sub_url = os.getenv('SUBURL', '')
-# If the environment variable is available and not empty
-if sub_url:
-    # Repeat it twice with '/' as a separator
-    LOGIN_REDIRECT_URL = f"/{sub_url}/"
-else:
-    # Otherwise, set it to blank
-    LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'account:login'
+GDRIVEFOLDERID=os.getenv('DriveFolderId')
+SECRETFOLDERID=os.getenv('SecretFolderId')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
