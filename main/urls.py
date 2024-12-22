@@ -22,6 +22,9 @@ urlpatterns = [
 
      #Apis
      path('apis/v1/home', mainHome.as_view()),
+     path('apis/v1/gallery', mainImageGallery.as_view()),
+     path('apis/v1/announcement', mainGlobalAnnouncement.as_view()),
+]
 
-] 
+
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

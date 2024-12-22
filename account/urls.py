@@ -33,6 +33,8 @@ urlpatterns = [
      path('apis/v1/feedback', accountFeedback.as_view()),
      path('apis/v1/settings', accountSettings.as_view()),
      path('apis/v1/change-password', accountChangePassword.as_view()),
+     path('apis/v1/check-auth', CheckAuthView.as_view()),
+
 
 ] 
 urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

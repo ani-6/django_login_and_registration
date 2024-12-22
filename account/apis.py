@@ -12,7 +12,7 @@ from .views import *
 
 
 class accountLogin(APIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
@@ -21,7 +21,8 @@ class accountLogin(APIView):
         if auth == 'session':
             if user is not None:
                 login(request, user)
-                return Response({'detail': 'Login successful'}, status=status.HTTP_200_OK)
+                user_serializer = UserSerializer(user)
+                return Response({'detail': 'Login successful','user': user_serializer.data}, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
         else:
@@ -104,17 +105,23 @@ class accountChangePassword(APIView):
 class accountLogout(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
- 
+
     def post(self, request):
-        if isinstance(request.auth, SessionAuthentication):
+        # Check if the request is authenticated by SessionAuthentication
+        if isinstance(request.user, request.user.__class__) and request.auth is None:
             # Logout for session authentication
             logout(request)
             return Response({'detail': 'Session logout successful'}, status=status.HTTP_200_OK)
+
+        # Check if the request is authenticated by TokenAuthentication
         elif isinstance(request.auth, TokenAuthentication):
             # Logout for token authentication
-            token = request.auth
-            token.delete()
-            return Response({'detail': 'Token logout successful'}, status=status.HTTP_200_OK)
+            if hasattr(request.user, 'auth_token'):
+                request.user.auth_token.delete()
+                return Response({'detail': 'Token logout successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Token not found for user'}, status=status.HTTP_400_BAD_REQUEST)
+
         else:
             return Response({'error': 'Authentication type not supported'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -131,3 +138,10 @@ class accountFeedback(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class CheckAuthView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        user_serializer = UserSerializer(user)
+        return Response({"id": user.id, "is_staff":user.is_staff, "user": user_serializer.data}, status=200) 

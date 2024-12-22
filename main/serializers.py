@@ -9,8 +9,18 @@ class mainImportantLinkSerializer(serializers.ModelSerializer):
 class mainLatestUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = LatestUpdates
-        fields = ['user','update']
+        fields = ['user','update', 'created_at']
 
 class mainHomeSerializer(serializers.ModelSerializer):
     importantLinks = mainImportantLinkSerializer()
     latestUpdates = mainLatestUpdateSerializer()
+
+class mainGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image_Gallery
+        fields = '__all__'
+
+class mainGlobalAnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = globalAnnouncement
+        fields = '__all__'

@@ -54,11 +54,13 @@ INSTALLED_APPS = [
     'maintenance_mode',    # Maintenance mode
     'rest_framework',   # REST API
     'rest_framework.authtoken', # REST API
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.gzip.GZipMiddleware',    # Compression middleware for faster page load
@@ -222,6 +224,18 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+CORS_ALLOW_CREDENTIALS = True 
+CSRF_COOKIE_HTTPONLY = False  # To allow JavaScript to access the CSRF cookie
+CSRF_COOKIE_NAME = "csrftoken"  
+
+# Ensure session cookies are sent
+
+SESSION_COOKIE_SAMESITE = "Lax"
+ 
 # Define your logging configuration
 LOGGING = {
     'version': 1,
