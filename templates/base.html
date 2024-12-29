@@ -10,8 +10,6 @@
     <title>{% block title %} {% endblock %} </title>
     <!-- CSS files -->
     <link href="{% static 'uiCore/css/tabler.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/tabler-vendors.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'uiCore/css/demo.min.css' %}" rel="stylesheet" />
     <link href="{% static 'uiCustom/css/app.css' %}" rel="stylesheet" />
     <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -106,10 +104,9 @@
             document.addEventListener('touchmove', updateActivity); // Added touchmove event for mobile scrolling
           </script>
         
-        <script src="/static/uiCustom/js/main.js"></script>
+        
         <!-- Tabler Core -->
         <script src="{% static 'uiCore/js/tabler.min.js' %}" defer></script>
-        <script src="{% static 'uiCore/js/demo.min.js' %}" defer></script>
     </div>
 </body>
 

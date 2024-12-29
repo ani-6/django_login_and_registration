@@ -1,8 +1,13 @@
 {% load static %}
 <script src="{% static 'gallery/js/aos.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-<script src="{% static 'gallery/js/main.js' %}"></script>
 <script>
+    AOS.init({
+        duration: 800,
+        easing: 'slide',
+        once: false
+    });
+
     Fancybox.bind('[data-fancybox="gallery"]', {
         compact: false,
         contentClick: "iterateZoom",
@@ -11,8 +16,8 @@
                 maxScale: 3,
             },
         },
-        Carousel : {
-          transition: "slide"
+        Carousel: {
+            transition: "slide"
         },
         Toolbar: {
             display: {

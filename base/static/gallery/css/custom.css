@@ -20,4 +20,25 @@
     font-size: 1.65rem;
 }
 
+/* Hide FAB by default */
+#fab {
+    display: none;
+}
 
+/* Display FAB only on small screens */
+@media (max-width: 768px) {
+    #fab {
+        display: inline-flex;
+        /* Flex display for center alignment */
+        align-items: center;
+        /* Center icon vertically */
+        justify-content: center;
+        /* Center icon horizontally */
+        background-color: rgba(0, 123, 255, 0.4);
+        /* Semi-transparent background using RGBA */
+        border: none;
+        /* Remove border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* Optional shadow for depth */
+    }
+}

@@ -128,7 +128,7 @@ def settings_view(request):
 def deleteAvtar_view(request):
     profile = Profile.objects.get(user=request.user)
     old_profile_pic = request.user.user_profile.profile_picture.path
-    profile.profile_picture = os.path.join(settings.BASE_DIR,'Account/profile_images/default.jpg')
+    profile.profile_picture = 'Account/profile_images/default.jpg'
     delete_old_image(old_profile_pic)
     profile.save()
     messages.success(request, 'Avtar deleted successfully')
@@ -151,7 +151,7 @@ def feedback_view(request):
             form.comment = comment
             form.save()
             messages.success(request, 'Feedback sent!')
-            return HttpResponseRedirect('/account/feedback/')
+            return redirect(to='account:feedback')
     else:
         form = form
     context = {'form':form,}

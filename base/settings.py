@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent  #Directory loaction of all ap
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Determine the environment and load the correct .env file
-environment = os.getenv('DJANGO_ENV', 'development')
+environment = os.getenv('DJANGO_ENV', 'production')
 
 if environment == 'production':
     dotenv_path = os.path.join(BASE_DIR, '.env.production')
@@ -85,8 +85,10 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',    # For social Login
                 'social_django.context_processors.login_redirect',  # For social Login
+                'account.context_processors.user_thumbnail_url',    # For thumbnail url
                 'main.context_processors.announcement_context_processor',   # For notifications
                 'main.context_processors.settings_variable_processor',  # For sub url
+                'main.context_processors.user_group_processor',  # For checking group permission
             ],
         },
     },
@@ -230,7 +232,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 CORS_ALLOW_CREDENTIALS = True 
 CSRF_COOKIE_HTTPONLY = False  # To allow JavaScript to access the CSRF cookie
-CSRF_COOKIE_NAME = "csrftoken"  
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_SAMESITE = 'LAX'
 
 # Ensure session cookies are sent
 
@@ -257,6 +260,12 @@ LOGGING = {
             'filename': os.path.join(BASE_DIR,'logfile.log'),
             'formatter': 'verbose',
         },
+        'console': {
+            'level': 'DEBUG',  # This will capture DEBUG, INFO, WARNING, ERROR, CRITICAL
+            'class': 'logging.StreamHandler',
+            'stream': 'ext://sys.stdout',
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
@@ -272,5 +281,5 @@ if environment == 'production':
     LOGGING['loggers']['django']['handlers'] = ['file']
     LOGGING['loggers']['django']['level'] = 'INFO'
 else:
-    LOGGING['loggers']['django']['handlers'] = []
+    LOGGING['loggers']['django']['handlers'] = ['console']
     LOGGING['loggers']['django']['level'] = 'DEBUG'

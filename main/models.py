@@ -30,6 +30,9 @@ class LatestUpdates(models.Model):
     class Meta:
         verbose_name = "update"
         verbose_name_plural = "User specific updates"
+        indexes = [
+            models.Index(fields=['user', 'created_at']),
+        ]
 
 class Image_Gallery(models.Model):
     user = models.ManyToManyField(User)
@@ -79,3 +82,6 @@ class globalAnnouncement(models.Model):
     class Meta:
         verbose_name = "Announcement"
         verbose_name_plural = "Global notifications"
+        indexes = [
+            models.Index(fields=['is_active', 'created_at']),
+        ]

@@ -12,7 +12,7 @@ from .views import *
 
 
 class accountLogin(APIView):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
