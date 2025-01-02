@@ -12,16 +12,14 @@ RUN pip install gunicorn
 # Copy the application code
 COPY . /app/
 
-RUN chmod -R 755 static
-# Run collectstatic
+# Run collectstatic and copy files to /app/static
 RUN python3 manage.py collectstatic --noinput
 
-# Set appropriate permissions
-RUN chmod -R 755 static
+# Set appropriate permissions on the static files
+RUN chmod -R 755 /app/static
 
 # Expose Django's default port
 EXPOSE 8000
 
 # Command to run Django app
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "base.wsgi:application"]
-
