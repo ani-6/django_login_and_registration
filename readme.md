@@ -1,70 +1,93 @@
-# Django Login and Registration Template
+# Django Gallery With Login and Registration
 
-An example of Django project with basic user functionality.
+This is an example of a Django project providing basic user authentication and related functionality. The template includes login, registration, password management, and more, as well as additional features like a gallery and a basic chat application with rest apis usign Django rest framework.
 
-Credentials:
-- Username : admin
-- password : serveradmin987
+## Features
 
-- Username : test_user
-- Password : test@123
+- **Login & Authentication:**
+    - Log in with username and password
+    - "Remember me" checkbox (optional)
+- **Account Management:**
+    - Create an account
+    - Reset password
+    - Resend an activation code
+    - Change password
+    - Change email
+    - Change profile information
+- **Additional Features:**
+    - Gallery for images
+    - Download files from a URL and upload to Google Drive (requires a token in the `base/Gdrive` folder)
+    - Basic chat application
+    - Feedback form
+- **APIs:**
+    - REST APIs for all views (for integration with external systems)
+  
+## Credentials (default for testing)
 
+- **Username**: admin  
+  **Password**: serveradmin987
+  
+- **Username**: test_user  
+  **Password**: test@123
 
-## Functionality
+## Installation
 
-- Log in
-    - via username & password
-    - with a remember me checkbox (optional)
-- Create an account
-- Reset password
-- Resend an activation code
-- Change password
-- Change email
-- Change profile
-- Gallery 
-- Download files form url and upload to google drive (put token in base>Gdrive folder)
-- Basic chat application
-- Feedback form
+### 1. Install Dependencies & Set Up Virtual Environment
 
-
-### Install dependencies & activate virtualenv
+To get started, install the required dependencies and activate a virtual environment:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configure the settings (connection to the database, connection to an SMTP server, and other options)
 
-- Add environment variables in .env file
-- Put your credentials/token file in base/Gdrive to make downloader work
+### 2. Configure Settings
 
-### Create required groups, superuser and test users (req only if running new DB)
-create superuser and test users with prefix test
+Ensure the following configurations are done:
+- Database Connection: Edit the settings to connect to your desired database.
+- SMTP Server: Configure the SMTP server settings for email-related functionality.
+- Google Drive Token: Place the Google Drive token in base/Gdrive to enable file downloading and uploading to Google Drive.
+- Define Trusted origins for CORS and CSRF in env files.
 
-```bash
+You can add environment variables in a .env file to configure settings like database credentials, SMTP server settings, and Google Drive token.
+
+### 3. Create Required Groups, Superuser, and Test Users
+
+If you are using a new database, create the necessary groups, superuser, and test users:
+
+``` bash
 python3 manage.py creategroups
-python3 manage.py loadadmin 1 --admin 
+python3 manage.py loadadmin 1 --admin
 python3 manage.py loadadmin 2 -p test
 ```
 
+- The first command creates necessary user groups.
+- The second command creates an admin user with username admin and password serveradmin987.
+- The third command creates a test user with username test_user and password test@123.
 
-### Running
 
-#### A development server
+## Running the Project
+### Development Server
 
-Run this command for http:
+To run the development server, execute the following command:
 
 ```bash
 python3 manage.py runserver
 ```
 
-### Access server on 
+This will start the server at http://localhost:8000.
+### Docker & HTTPS
+
+If you prefer to use Docker with Nginx and HTTPS, you can run the project using Docker Compose:
 
 ```bash
-localhost:8000
+docker compose up -d
 ```
 
-### <summary>Screenshots</summary>
+This will start the application with HTTPS on your local environment.
+
+
+## <summary>Screenshots</summary>
 
 <img src="Screenshots/Screenshot 2024-04-06 165256.png" height="auto" width="800">
 <img src="Screenshots/Screenshot 2024-04-06 170051.png" height="auto" width="800">

@@ -226,20 +226,21 @@ REST_FRAMEWORK = {
     ]
 }
 
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
+#Cores settings
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True 
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+
+#CSRF settings
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 CSRF_COOKIE_HTTPONLY = False  # To allow JavaScript to access the CSRF cookie
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_COOKIE_SAMESITE = 'LAX'
 
-# Ensure session cookies are sent
-
+#Ensure session cookies are sent
 SESSION_COOKIE_SAMESITE = "Lax"
  
-# Define your logging configuration
+#Define your logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -255,13 +256,13 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR,'logfile.log'),
             'formatter': 'verbose',
         },
         'console': {
-            'level': 'DEBUG',  # This will capture DEBUG, INFO, WARNING, ERROR, CRITICAL
+            'level': 'INFO', 
             'class': 'logging.StreamHandler',
             'stream': 'ext://sys.stdout',
             'formatter': 'verbose',
@@ -279,7 +280,7 @@ LOGGING = {
 # Only enable file logging in production
 if environment == 'production':
     LOGGING['loggers']['django']['handlers'] = ['file']
-    LOGGING['loggers']['django']['level'] = 'INFO'
+ 
 else:
     LOGGING['loggers']['django']['handlers'] = ['console']
-    LOGGING['loggers']['django']['level'] = 'DEBUG'
+   
