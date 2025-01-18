@@ -87,7 +87,7 @@ docker compose up -d
 This will start the application with HTTPS on your local environment.
 
 
-## <summary>Screenshots</summary>
+## Screenshots
 
 <img src="Screenshots/Screenshot 2024-04-06 165256.png" height="auto" width="800">
 <img src="Screenshots/Screenshot 2024-04-06 170051.png" height="auto" width="800">
