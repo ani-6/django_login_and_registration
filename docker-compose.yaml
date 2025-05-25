@@ -19,7 +19,7 @@ services:
       - ./nginx/certs:/etc/nginx/certs  # Mount SSL certs
       - static_volume:/static  # Mount the named volume to /static for Nginx to serve
     ports:
-      - "8001:443"  # Expose Nginx to the host
+      - "443:443"  # Expose Nginx to the host
     depends_on:
       - django_app
       - redis

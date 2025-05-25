@@ -17,7 +17,7 @@ This is an example of a Django project providing basic user authentication and r
 - **Additional Features:**
     - Gallery for images
     - Download files from a URL and upload to Google Drive (requires a token in the `base/Gdrive` folder)
-    - Basic chat application
+    - Chat application with websocket (ensure redis is installed on your system)
     - Feedback form
 - **APIs:**
     - REST APIs for all views (for integration with external systems)
@@ -84,7 +84,7 @@ If you prefer to use Docker with Nginx and HTTPS, you can run the project using 
 docker compose up -d
 ```
 
-This will start the application with HTTPS on your local environment.
+This will start the application with HTTPS on your local environment. Docker comes with self-signed certificate consider changing it according to your need.
 
 
 ## Screenshots
