@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %} Chats {% endblock title %}
+{% block content %}
+<!-- Page header -->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    Chat with your friends
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page body -->
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            <div class="card col-md-8">
+                <div class="card-header">
+                    <h3 class="card-title">Chats</h3>
+                </div>
+                <div class="list-group list-group-flush overflow-auto" style="max-height: 35rem">
+                    {%for user in pageobj %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-auto"><a href="{{ HOMEURL }}chat/chat/{{user.username}}"><span class="avatar avatar-xl mb-3 rounded"
+                                style="background-image: url('{{ user.user_profile.thumbnail_url }}')"></span></a>
+                            </div>
+                            <div class="col text-truncate">
+                                <a href="{{ HOMEURL }}chat/chat/{{user.username}}" class="text-body d-block">{{user.first_name}}
+                                <div class="text-secondary text-truncate">{{ user.user_profile.headline}}</div>
+                                <div class="text-secondary text-truncate">{{ user.user_profile.bio}}</div></a>
+                            </div>
+                        </div>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

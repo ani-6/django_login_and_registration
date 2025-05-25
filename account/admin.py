@@ -29,21 +29,6 @@ class profile_admin(admin.ModelAdmin):
         )
     list_display = ['user','gender']
 
-@admin.register(Messages)
-class messages_admin(admin.ModelAdmin):
-    fieldsets = (
-        ('Users', {
-        'fields': ['sender','receiver']
-        }),
-        ('Chat', {
-        'classes': ('wide',),
-        'fields': ('message','created_at','last_updated_at'),
-        }),
-    )
-    search_fields = ('sender__username','receiver__username', 'message')
-    list_display = ['sender','receiver','message','created_at']
-    readonly_fields = ['sender','receiver','message','created_at','last_updated_at']
-
 @admin.register(Feedback)
 class feedback_admin(admin.ModelAdmin):
     fieldsets = (

@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent  #Directory loaction of all ap
 PROJECT_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Determine the environment and load the correct .env file
-environment = os.getenv('DJANGO_ENV', 'production')
+environment = os.getenv('DJANGO_ENV', 'development')
 
 if environment == 'production':
     dotenv_path = os.path.join(BASE_DIR, '.env.production')
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne', # For ASGI support
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',   # Add account app
     'main.apps.MainConfig',   # Add main app
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     'rest_framework',   # REST API
     'rest_framework.authtoken', # REST API
     'corsheaders',
+    'channels', # For the channels app
+    'chat', # For the chat app
 ]
 
 MIDDLEWARE = [
@@ -96,6 +99,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'base.wsgi.application'
 
+# Channels
+ASGI_APPLICATION = 'base.asgi.application'
+
+# Redis config (using default localhost:6379)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [(os.getenv('Redis_Host', '127.0.0.1'), 6379)]},
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -226,6 +239,7 @@ REST_FRAMEWORK = {
     ]
 }
 
+
 #Cores settings
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True 
@@ -255,14 +269,23 @@ LOGGING = {
         },
     },
     'handlers': {
+        # Handler for the production log file
         'file': {
-            'level': 'WARNING',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR,'logfile.log'),
+            'filename': os.path.join(BASE_DIR, 'logfile.log'),
             'formatter': 'verbose',
         },
+        # Handler for the debug log file (non-production)
+        'debug_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'verbose',
+        },
+        # Handler for console output (only show INFO and higher logs)
         'console': {
-            'level': 'INFO', 
+            'level': 'INFO',  # Only show INFO and higher logs in the console
             'class': 'logging.StreamHandler',
             'stream': 'ext://sys.stdout',
             'formatter': 'verbose',
@@ -270,17 +293,26 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file'],  # For production, file logging; for non-prod, both console and debug
             'level': 'INFO',
             'propagate': True,
+        },
+        # For capturing debug logs in non-production environments
+        'django.debug': {
+            'handlers': ['debug_file'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
 }
 
-# Only enable file logging in production
+# Adjust logging configuration based on the environment
 if environment == 'production':
-    LOGGING['loggers']['django']['handlers'] = ['file']
- 
+    LOGGING['loggers']['django']['handlers'] = ['file']  # Use file logging in production
+    LOGGING['loggers']['django']['level'] = 'INFO'
+    LOGGING['loggers']['django.debug']['handlers'] = []  # Disable the debug log handler in production
 else:
-    LOGGING['loggers']['django']['handlers'] = ['console']
-   
+    # In non-production, log DEBUG messages to both debug.log file but not on the console
+    LOGGING['loggers']['django']['handlers'] = ['console', 'file']  # Show only INFO or higher on console
+    LOGGING['loggers']['django']['level'] = 'INFO'  # Show only INFO level and above in console
+    LOGGING['loggers']['django.debug']['handlers'] = ['debug_file']

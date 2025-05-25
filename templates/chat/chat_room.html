@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block title %} Chat {% endblock title %}
+{% block content %}
+<!-- Page header -->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto"><a href="#"><span class="avatar avatar-md mb-3 rounded"
+                        style="background-image: url('{{ other_user.user_profile.thumbnail_url }}')"></span></a>
+            </div>
+            <div class="col">
+                <h2 class="page-title chat-header">
+                    Chat with {{ other_user.first_name }}
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Page body -->
+<div class="page-body">
+    <div class="container-xl">
+        {% if all_messages %}
+        <div class="col d-flex flex-column" id="chat-box">
+            <div class="card-body scrollable" style="max-height: 30rem" id="scrollableDiv">
+                <div class="chat">
+                    <div class="chat-bubbles">
+                        {% for msg in all_messages %}
+                        {% if msg.sender.username == user.username %}
+                        <div class="chat-item">
+                            <div class="row align-items-end justify-content-end">
+                                <div class="col col-lg-6">
+                                    <div class="chat-bubble chat-bubble-me">
+                                        <div class="chat-bubble-title">
+                                            <div class="row">
+                                                <div class="col chat-bubble-author">{{ msg.sender.first_name }}</div>
+                                                <div class="col-auto chat-bubble-date">{{ msg.timestamp|date:"j F Y, h:i a" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat-bubble-body">
+                                            <p>{{ msg.content|linebreaks }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto"><span class="avatar"
+                                        style="background-image: url('{{ msg.sender.user_profile.thumbnail_url }}')"></span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if msg.sender.username != user.username %}
+                        <div class="chat-item">
+                            <div class="row align-items-end">
+                                <div class="col-auto"><span class="avatar"
+                                        style="background-image: url('{{ msg.sender.user_profile.thumbnail_url }}')"></span>
+                                </div>
+                                <div class="col col-lg-6">
+                                    <div class="chat-bubble">
+                                        <div class="chat-bubble-title">
+                                            <div class="row">
+                                                <div class="col chat-bubble-author">{{ msg.sender.first_name }}</div>
+                                                <div class="col-auto chat-bubble-date">{{ msg.timestamp|date:"j F Y, h:i a" }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat-bubble-body">
+                                            <p>{{ msg.content|linebreaks }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endif%}
+        <br>
+        <div class="row">
+            <div class="col-lg-4">
+            </div>
+            <div class="col-lg-8 justify-content-end">
+                <div class="row row-cards">
+                    <div class="col-lg-6">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <textarea class="form-control" id="messageInput" rows="3" width="30px" autocomplete="off"
+                                placeholder="Type a message"></textarea>
+                        </div>
+                        <div class="card-footer bg-transparent mt-auto">
+                            <div class="btn-list justify-content-end">
+
+                                <button id="sendButton" onclick="sendMessage()" class="btn btn-primary btn-pill"
+                                    disabled>Send</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let chatSocket = null;
+    let isManuallyClosed = false;
+
+    const chatUrl =
+        (window.location.protocol === "https:" ? "wss://" : "ws://") +
+        window.location.host +
+        "/ws/chat/{{ other_user.username }}/";
+    const hasInitialMessages = {{ all_messages|length|yesno:"true,false" }};
+
+    function connectWebSocket() {
+        chatSocket = new WebSocket(chatUrl);
+
+        chatSocket.onopen = function () {
+            console.log("WebSocket connection established.");
+            document.getElementById('sendButton').disabled = false;
+            if (!hasInitialMessages) {
+                chatSocket.send(JSON.stringify({
+                    'type': 'fetch_recent'
+                }));
+            }
+        };
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const currentUser = "{{ user.username }}";
+            const chatBubbles = document.querySelector('.chat-bubbles');
+
+            const isSelf = data.sender === currentUser;
+            const date = new Date(data.timestamp);
+
+            const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+            const fullDate = date.toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+            const messageTime = `${fullDate}, ${time}`;
+
+            function escapeHtml(text) {
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;',
+                };
+                return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+            }
+
+            const safeMessage = escapeHtml(data.message).replace(/\n/g, '<br>');
+
+            const bubbleHTML = isSelf ? `
+                <div class="chat-item">
+                    <div class="row align-items-end justify-content-end">
+                        <div class="col col-lg-6">
+                            <div class="chat-bubble chat-bubble-me">
+                                <div class="chat-bubble-title">
+                                    <div class="row">
+                                        <div class="col chat-bubble-author">${data.sender_name}</div>
+                                        <div class="col-auto chat-bubble-date">${messageTime}</div>
+                                    </div>
+                                </div>
+                                <div class="chat-bubble-body"><p>${safeMessage}</p></div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <span class="avatar" style="background-image: url('${data.sender_avatar}')"></span>
+                        </div>
+                    </div>
+                </div>
+            ` : `
+                <div class="chat-item">
+                    <div class="row align-items-end">
+                        <div class="col-auto">
+                            <span class="avatar" style="background-image: url('${data.sender_avatar}')"></span>
+                        </div>
+                        <div class="col col-lg-6">
+                            <div class="chat-bubble">
+                                <div class="chat-bubble-title">
+                                    <div class="row">
+                                        <div class="col chat-bubble-author">${data.sender_name}</div>
+                                        <div class="col-auto chat-bubble-date">${messageTime}</div>
+                                    </div>
+                                </div>
+                                <div class="chat-bubble-body"><p>${safeMessage}</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            chatBubbles.insertAdjacentHTML('beforeend', bubbleHTML);
+
+            const scrollableDiv = document.getElementById('scrollableDiv');
+            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        };
+
+        chatSocket.onclose = function (e) {
+            console.warn("WebSocket closed unexpectedly.");
+            if (!isManuallyClosed) {
+                // Do not reconnect immediately; wait for tab focus
+                chatSocket = null;
+            }
+        };
+
+        chatSocket.onerror = function (e) {
+            console.error("WebSocket encountered error:", e);
+            chatSocket.close();
+        };
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        if (!message || !chatSocket || chatSocket.readyState !== WebSocket.OPEN) return;
+
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        input.value = '';
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible" && (!chatSocket || chatSocket.readyState === WebSocket.CLOSED)) {
+            console.log("Reconnecting WebSocket on tab focus...");
+            connectWebSocket();
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        connectWebSocket();
+        const scrollableDiv = document.getElementById('scrollableDiv');
+        if (scrollableDiv) {
+            scrollableDiv.scrollTop = scrollableDiv.scrollHeight;
+        }
+    });
+
+    window.onbeforeunload = function () {
+        isManuallyClosed = true;
+        if (chatSocket) {
+            chatSocket.close();
+        }
+    };
+</script>
+
+{% endblock content %}

@@ -1,25 +1,47 @@
-# Dockerfile
-FROM python:3.12-slim
+# Stage 1: Builder with build dependencies
+FROM python:3.12-slim as builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements.txt and install dependencies
-COPY requirements.txt /app/
+# Set Python environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Install system build dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc python3-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create and activate virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
 
-# Copy the application code
-COPY . /app/
+# Copy application code
+COPY . .
 
-# Run collectstatic and copy files to /app/static
-RUN python3 manage.py collectstatic --noinput
+# Collect static files
+RUN python manage.py collectstatic --noinput
 
-# Set appropriate permissions on the static files
-RUN chmod -R 755 /app/static
+# Stage 2: Final image with runtime dependencies only
+FROM python:3.12-slim
 
-# Expose Django's default port
+WORKDIR /app
+
+# Set Python environment and path
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/opt/venv/bin:$PATH" \
+    DJANGO_SETTINGS_MODULE=base.settings
+
+# Copy virtual environment and application
+COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /app /app
+
+
 EXPOSE 8000
 
-# Command to run Django app
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "base.wsgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "base.asgi:application"]

@@ -157,35 +157,6 @@ def feedback_view(request):
     context = {'form':form,}
     return render(request, 'account/feedback.html',context)
 
-@login_required
-def chats_view(request):
-    users = User.objects.filter(is_active=True).distinct().exclude(username=request.user.username)
-    context = {'pageobj':users,}
-    return render(request, 'account/chats.html',context)
-
-
-@login_required
-def chat_view(request,id):
-    userName = User.objects.get(id=id)
-    query = Q() | (Q(sender__exact=request.user) & Q(receiver_id=id)) | (Q(sender_id=id) & Q(receiver__exact=request.user))
-    all_commnets = Messages.objects.filter(query).order_by('created_at').distinct()
-    form = messages_form(request.POST)
-    if request.method == 'POST':
-        if form.is_valid():
-            message = form.cleaned_data['message']
-            form = form.save(commit=False)           
-            form.sender = request.user
-            form.receiver = User.objects.get(id=id)
-            form.message = message
-            form.save()
-            messages.success(request, 'Message sent!')
-            to_url = settings.LOGIN_REDIRECT_URL +'account/chat/'+str(id)
-            return HttpResponseRedirect(to_url)
-    else:
-        form = form
-    context = {'pageobj':all_commnets,'userName':userName,'form':form,}
-    return render(request, 'account/chat.html',context)
-
 #Logout method
 def logoutUser_view(request):
     logout(request)

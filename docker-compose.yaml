@@ -1,5 +1,6 @@
 services:
   django_app:
+    container_name: django_application
     build: .
     volumes:
       - .:/app           # Mount the application code
@@ -8,6 +9,8 @@ services:
       - "8000"  # Expose the app internally to Nginx (only accessible from within the Docker network)
     environment:
       - DJANGO_ENV=production
+      - CORS_ALLOWED_ORIGINS=https://localhost:8000,https://192.168.0.102:8001,https://168.138.190.252:8000
+      - CSRF_TRUSTED_ORIGINS=https://localhost:8000,https://192.168.0.102:8001,https://168.138.190.252:8000
 
   nginx:
     image: nginx:latest
@@ -16,9 +19,21 @@ services:
       - ./nginx/certs:/etc/nginx/certs  # Mount SSL certs
       - static_volume:/static  # Mount the named volume to /static for Nginx to serve
     ports:
-      - "443:443"  # Expose Nginx to the host
+      - "8001:443"  # Expose Nginx to the host
     depends_on:
       - django_app
+      - redis
+
+  redis:
+    image: redis:8.0.1-alpine
+    container_name: redis
+    expose:
+      - "6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
 
 volumes:
   static_volume:  # Define a named volume for static files
+  redis-data:

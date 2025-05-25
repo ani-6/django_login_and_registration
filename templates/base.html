@@ -9,6 +9,7 @@
     <link rel="icon" type="image/svg" href="{% static 'logo-small.svg' %}">
     <title>{% block title %} {% endblock %} </title>
     <!-- CSS files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <link href="{% static 'uiCore/css/tabler.min.css' %}" rel="stylesheet" />
     <link href="{% static 'uiCustom/css/app.css' %}" rel="stylesheet" />
     <style>
@@ -28,7 +29,7 @@
 
 <body>
     <!-- Add script for darkmode-->
-    <script src="{% static 'uiCore/js/demo-theme.min.js' %}"></script>
+    <script src="{% static 'uiCore/js/tabler-theme.min.js' %}"></script>
     <div class="page">
         <!--Any flash messages pop up in any page because this is the base template-->
         {% if user.is_authenticated %}

@@ -26,12 +26,13 @@ urlpatterns = [
     #Registered apps
     path('', include('main.urls', namespace='main')),
     path('account/', include('account.urls', namespace='account')),
+    path('chat/', include('chat.urls', namespace='chat')),
     #Social Login
     re_path(r'^auth/', include('social_django.urls', namespace='social')),
     #maintenance mode
     re_path(r"^maintenance-mode/", include("maintenance_mode.urls")),
 ]
-urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT,)
 
 # Custom error pages
 handler404 = 'main.views.custom_404_view'

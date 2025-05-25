@@ -1,76 +1,166 @@
 /* Profile card */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 .profile-card {
-    position: relative;
-    border: #2c3a47 solid 1px;
+    font-family: 'Poppins', sans-serif;
     width: 100%;
-    display: grid;
-    min-height: 500px;
+    max-width: 800px; /* Maximum card width */
+    min-height: auto;
     max-height: auto;
-    background: var(--white);
-    padding: 20px;
-    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
+    margin: 0 auto 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease;
 }
 
 .profile-card-header {
-    text-align: center;
-    background: #2c3a47;
-    padding: 60px 5px;
+    height: 270px; /* Reduced header height for mobile */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 15px;
 }
 
 .profile-pic {
-    display: inline-block;
-    padding: 7px;
-    background: linear-gradient(130deg, #3E5151, #34E89E);
-    margin: auto;
-    border-radius: 500%;
-    background-size: 200% 200%;
-    animation: animated-gradient 2s linear infinite;
-}
-
-@keyframes animated-gradient {
-    25% {
-        background-position: left bottom;
-    }
-
-    50% {
-        background-position: right bottom;
-    }
-
-    75% {
-        background-position: right top;
-    }
-
-    100% {
-        background-position: left top;
-    }
-}
-
-.profile-pic img {
-    display: block;
-    width: 225px;
-    height: 225px;
-    border-radius: 70%;
+    width: 200px; /* Smaller profile picture */
+    height: auto;
+    max-height: 260px;
+    border-radius: 50%;
+    border: 3px solid white;
+    position: absolute;
+    bottom: -110px;
+    z-index: 2;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .profile-name {
-    color: #f2f2f2;
-    font-size: 28px;
-    font-weight: 600;
-    margin: 10px 0;
+    margin-top: 60px; /* Adjusted positioning */
+    font-size: 1.5em; /* Smaller font size */
+    text-align: center;
 }
 
 .profile-desc {
-    font-size: 18px;
-    color: #e66767;
+    font-size: 0.9em; /* Smaller font size */
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .profile-card-footer {
-    color: #2c3a47;
-    text-align: center;
-    background: #b9b9b5;
-    max-height: auto;
-    padding: 50px 10px;
+    padding: 75px 20px 20px; /* Reduced padding */
+}
+
+.profile-card-footer h3 {
+    font-size: 1.2em; /* Smaller heading */
+    margin-bottom: 12px;
+}
+
+.profile-card-footer p {
+    font-size: 0.85em; /* Smaller paragraph text */
+    line-height: 1.5;
+}
+
+/* Mobile-Specific Adjustments */
+@media (max-width: 480px) {
+    .profile-card {
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-card-header {
+        height: 180px;
+    }
+
+    .profile-pic {
+        width: 140px;
+        height: auto;
+        max-height: 180px;
+        bottom: -105px;
+    }
+
+    .profile-name {
+        margin-top: 50px;
+        font-size: 1.3em;
+    }
+
+    .profile-card-footer {
+        padding: 103px 15px 15px;
+    }
+
+    .profile-card-footer h3 {
+        font-size: 1.1em;
+    }
+
+    .profile-card-footer p {
+        font-size: 0.8em;
+    }
+}
+
+/* Touch device optimization */
+@media (hover: none) {
+    .profile-card:hover {
+        transform: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .profile-pic:hover {
+        transform: none;
+    }
 }
 
 /* Profile card Endblock*/
+
+/* Loading Animation*/
+.loading-animation {
+    position: absolute;
+    /* Position the loading animation absolutely */
+    top: 50%;
+    /* Center vertically */
+    left: 50%;
+    /* Center horizontally */
+    transform: translate(-50%, -50%);
+    /* Move it back by half its width and height */
+}
+
+/* Hide FAB by default */
+#fab {
+    display: none;
+}
+
+/* Display FAB only on small screens */
+@media (max-width: 768px) {
+    #fab {
+        display: inline-flex;
+        /* Flex display for center alignment */
+        align-items: center;
+        /* Center icon vertically */
+        justify-content: center;
+        /* Center icon horizontally */
+        background-color: rgba(0, 123, 255, 0.4);
+        /* Semi-transparent background using RGBA */
+        border: none;
+        /* Remove border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* Optional shadow for depth */
+    }
+}
+
+.home-updates {
+    margin: 20px 0px 20px 10px;
+}
+
+.updates-card {
+    padding: 10px;
+}
+
+.custom-card {
+    border: none;
+}
+
+.chat-header {
+    margin-bottom: 15px;
+}

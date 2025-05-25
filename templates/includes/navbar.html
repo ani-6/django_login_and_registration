@@ -64,7 +64,8 @@
                                         <div class="col-auto"><span
                                                 class="status-dot status-dot-animated bg-red d-block"></span></div>
                                         <div class="col text-truncate">
-                                            <a href="{% url 'main:notifications' %}" class="text-body d-block">{{ announcement.title|safe }}</a>
+                                            <a href="{% url 'main:notifications' %}" class="text-body d-block">
+                                                {{ announcement.title|safe }}</a>
                                             <div class="d-block text-secondary text-truncate mt-n1">
                                                 {{ announcement.description|safe }}
                                             </div>
@@ -159,13 +160,13 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" href="{% url 'account:chats' %}">
+                                    <a class="dropdown-item" href="{% url 'chat:user_list' %}">
                                         Chats
                                     </a>
-                                    <a class="dropdown-item" href="{%url 'main:urldownloader'%}">
+                                    <a class="dropdown-item" href="{%url 'main:urldownloader' %}">
                                         Upload to drive
                                     </a>
-                                    <a class="dropdown-item" href="{%url 'main:localgallery'%}">
+                                    <a class="dropdown-item" href="{%url 'main:localgallery' %}">
                                         Local Gallery
                                     </a>
                                 </div>
@@ -174,7 +175,7 @@
                     </li>
                 </ul>
                 <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                    <form  autocomplete="off" novalidate>
+                    <form autocomplete="off" novalidate>
                         <div class="input-icon">
                             <span class="input-icon-addon">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->

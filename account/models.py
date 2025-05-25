@@ -22,6 +22,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    @property
     def thumbnail_url(self):
         # Check if the profile picture is set and is not default.png
         if self.profile_picture and os.path.basename(self.profile_picture.name) != 'default.jpg':
@@ -31,20 +32,6 @@ class Profile(models.Model):
         else:
             # Return the original profile picture URL
             return settings.LOGIN_REDIRECT_URL + 'secure_media/' + self.profile_picture.name
-
-class Messages(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Sender")
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE,related_name="Receiver")
-    message = models.TextField(null=True, blank=True,verbose_name='Message')
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return self.sender.username
-    
-    class Meta:
-        verbose_name = "Message"
-        verbose_name_plural = "Messages List"
 
 class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="User")
